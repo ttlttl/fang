@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from . import db, login_manager
 
+
 class User(UserMixin,db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -27,6 +28,9 @@ class User(UserMixin,db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def is_administrator(self):
+        return self.is_admin
 
     #for unit test
     @staticmethod
