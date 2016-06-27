@@ -28,6 +28,18 @@ def logout():
     return redirect(url_for('main.index'))
 
 
+@auth.route('/user_management', methods=['GET'])
+@login_required
+@admin_required
+def user_management():
+    page = request.args.get('page', 1, type=int)
+    pagination = User.query.order_by(User.id).paginate(
+        page, per_page=10, error_out=False
+    )
+    users = pagination.items
+    return render_template('auth/user_management.html', users=users, pagination=pagination)
+
+
 @auth.route('/add_user', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -40,5 +52,38 @@ def add_user():
                     is_admin=form.is_admin.data)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('main.index'))
+        flash('添加成功')
+        return redirect(url_for('auth.user_management'))
     return render_template('auth/add_user.html', form=form)
+
+
+@auth.route('/status_user/<int:id>')
+@login_required
+@admin_required
+def status_user(id):
+    user = User.query.get_or_404(id)
+    user.actived = not user.actived
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for('auth.user_management'))
+
+
+@auth.route('/modify_user/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def modify_user(id):
+    user = User.query.get_or_404(id)
+    form = AddUserForm()
+    form.email.data = user.email
+    form.username = user.username
+    form.is_admin = user.is_admin
+    if form.validate_on_submit():
+        user.email = form.email.data
+        user.username = form.username.data,
+        user.password = form.password.data,
+        user.is_admin = form.is_admin.data
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('auth.user_management'))
+    return render_template('auth/modify_user.html', form=form)
+
