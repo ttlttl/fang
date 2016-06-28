@@ -15,7 +15,7 @@ class User(UserMixin,db.Model):
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     actived = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
-    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    houses = db.relationship('House', backref='author', lazy='dynamic')
 
     @property
     def password(self):
@@ -31,7 +31,7 @@ class User(UserMixin,db.Model):
     def is_administrator(self):
         return self.is_admin
 
-    #for unit test
+    # for unit test
     @staticmethod
     def generate_fake(count=100):
         from sqlalchemy.exc import IntegrityError
@@ -61,12 +61,59 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class Post(db.Model):
-    __tablename__ = 'posts'
+class District(db.Model):
+    __tablename__ = 'districts'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    db.relationship('Area', backref='district', lazy='dynamic')
+
+    def __repr__(self):
+        return self.name
+
+class Area(db.Model):
+    __tablename__ = 'areas'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
+    db.relationship('Community', backref='area', lazy='dynamic')
+
+    def __repr__(self):
+        return self.name
+
+
+class Community(db.Model):
+    __tablename__ = 'communities'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    position_id = db.Column(db.Integer, db.ForeignKey('areas.id'))
+    db.relationship('House', backref='community', lazy='dynamic')
+
+    def __repr__(self):
+        return self.name
+
+
+class House(db.Model):
+    __tablename__ = 'houses'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
+    is_new = db.Column(db.Boolean, default=True)
+    completion_time = db.Column(db.DateTime)
+    kinds = db.Column(db.String(64), index=True)
+    decorate = db.Column(db.String(64), index=True)
+    direction = db.Column(db.String(64))
+    floor = db.Column(db.Integer)
+    total_floor = db.Column(db.Integer)
+    shi = db.Column(db.Integer)
+    ting = db.Column(db.Integer)
+    wei = db.Column(db.Integer)
+    price = db.Column(db.Integer)
+    total_area = db.Column(db.Integer)
+    total_price = db.Column(db.Integer)
+    down_payment = db.Column(db.Integer)
     detail = db.Column(db.Text)
     hot = db.Column(db.Integer, default=1)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    community_id = db.Column(db.Integer, db.ForeignKey('communities.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
 
