@@ -22,7 +22,7 @@
                     <th>id</th>
                     <th>用户名</th>
                     <th>邮箱</th>
-                    <th>管理</th>
+                    <th>密码</th>
                     <th>动作</th>
                 </tr>
             </thread>
@@ -32,7 +32,7 @@
                     <td>{{user.id}}</td>
                     <td>{{user.username}}</td>
                     <td>{{user.email}}</td>
-                    <td><a href="{{ url_for('auth.modify_user', id=user.id) }}">修改</a></td>
+                    <td><a href="{{ url_for('auth.change_password', id=user.id) }}">修改</a></td>
                     <td><a href="{{ url_for('auth.status_user', id=user.id) }}">
                         {% if user.actived %}
                         停用

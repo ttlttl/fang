@@ -1,10 +1,11 @@
 # -*- coding=UTF-8 -*-
 from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, logout_user, login_required
+from itsdangerous import Serializer
 from . import auth
 from .. import db
 from ..models import User
-from .forms import LoginForm, AddUserForm
+from .forms import LoginForm, AddUserForm, ChangePasswordForm
 from ..decorators import admin_required
 
 
@@ -68,22 +69,16 @@ def status_user(id):
     return redirect(url_for('auth.user_management'))
 
 
-@auth.route('/modify_user/<int:id>', methods=['GET', 'POST'])
+@auth.route('/change_password/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def modify_user(id):
-    user = User.query.get_or_404(id)
-    form = AddUserForm()
-    form.email.data = user.email
-    form.username = user.username
-    form.is_admin = user.is_admin
+def change_password(id):
+    user = User.query.filter_by(id=id).first()
+    form = ChangePasswordForm()
     if form.validate_on_submit():
-        user.email = form.email.data
-        user.username = form.username.data,
-        user.password = form.password.data,
-        user.is_admin = form.is_admin.data
+        user.password = form.password.data
         db.session.add(user)
-        db.session.commit()
+        flash("密码修改成功！")
         return redirect(url_for('auth.user_management'))
-    return render_template('auth/modify_user.html', form=form)
+    return render_template('auth/change_password.html', form=form)
 

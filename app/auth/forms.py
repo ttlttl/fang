@@ -21,3 +21,8 @@ class AddUserForm(Form):
     password = PasswordField('密码', validators=[DataRequired()])
     is_admin = BooleanField('管理员')
     submit = SubmitField('提交')
+
+
+class ChangePasswordForm(Form):
+    password = PasswordField('新密码', validators=[DataRequired()])
+    submit = SubmitField("修改")
