@@ -67,8 +67,21 @@ class District(db.Model):
     name = db.Column(db.String(64))
     db.relationship('Area', backref='district', lazy='dynamic')
 
+    @staticmethod
+    def insert_districts():
+        districts = ['黄埔区', '徐汇区', '长宁区', '静安区', '普陀区', '虹口区', '闵行区',\
+                     '杨浦区', '宝山区', '嘉定区', '浦东新区', '金山区', '松江区', \
+                     '青浦区', '奉贤区', '崇明县']
+        for d in districts:
+            district = District.query.filter_by(name=d).first()
+            if district is None:
+                district = District(name=d)
+                db.session.add(district)
+        db.session.commit()
+
     def __repr__(self):
         return self.name
+
 
 class Area(db.Model):
     __tablename__ = 'areas'
@@ -115,5 +128,3 @@ class House(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     community_id = db.Column(db.Integer, db.ForeignKey('communities.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-
