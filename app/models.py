@@ -105,26 +105,60 @@ class Community(db.Model):
         return self.name
 
 
+class HouseType():
+    gongyu = 1
+    bieshu = 2
+    zhuzhai = 3
+    laogongfang = 4
+    yangfang = 5
+    pingfang = 6
+    other = 99
+
+
+class HouseDecoration():
+    maopi = 1
+    jiandan = 2
+    zhongdeng = 3
+    jingzhuang = 4
+    haohua = 5
+    other = 99
+
+
+class HouseToward():
+    """
+    House toward, E = East, W = West ...
+    """
+    E = 1
+    W = 2
+    S = 3
+    N = 4
+    ES = 5
+    EN = 6
+    WS = 7
+    EN = 8
+
+
+
 class House(db.Model):
     __tablename__ = 'houses'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     is_new = db.Column(db.Boolean, default=True)
     completion_time = db.Column(db.DateTime)
-    kinds = db.Column(db.String(64), index=True)
-    decorate = db.Column(db.String(64), index=True)
-    direction = db.Column(db.String(64))
-    floor = db.Column(db.Integer)
-    total_floor = db.Column(db.Integer)
-    shi = db.Column(db.Integer)
-    ting = db.Column(db.Integer)
-    wei = db.Column(db.Integer)
-    price = db.Column(db.Integer)
-    total_area = db.Column(db.Integer)
-    total_price = db.Column(db.Integer)
-    down_payment = db.Column(db.Integer)
+    type = db.Column(db.SmallInteger)
+    decoration = db.Column(db.SmallInteger)
+    toward = db.Column(db.SmallInteger)
+    floor = db.Column(db.SmallInteger)
+    total_floor = db.Column(db.SmallInteger)
+    shi = db.Column(db.SmallInteger)
+    ting = db.Column(db.SmallInteger)
+    wei = db.Column(db.SmallInteger)
+    price = db.Column(db.SmallInteger)
+    total_area = db.Column(db.SmallInteger)
+    total_price = db.Column(db.SmallInteger)
+    down_payment = db.Column(db.SmallInteger)
     detail = db.Column(db.Text)
-    hot = db.Column(db.Integer, default=1)
+    hot = db.Column(db.SmallInteger, default=1)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     community_id = db.Column(db.Integer, db.ForeignKey('communities.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}房子网 - 添加二手房{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>发布二手房</h1>
+</div>
+<div class="page-header">
+    <h3>基本信息</h3>
+</div>
+<form action="" method="post" class="form-horizontal" role="form">
+        {{ form.hidden_tag() }}
+    {{form.errors}}
+        <div class="form-group ">
+            {{ form.total_area.label(class="col-sm-2 control-label")}}
+            <div class="col-sm-4">
+                <input class="form-control" id="total_area" name="total_area" type="text" value="">
+            </div>
+            <label class="control-label">平米</label>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label" for="price">{{form.price.label}}</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="price" name="price" type="text" value="">
+            </div>
+            <label class="control-label">万元</label>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label" for="total_price">总价：</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="total_price" name="total_price" type="text" value="">
+            </div>
+            <label class="control-label">万元</label>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label" for="down_payment">最低首付：</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="down_payment" name="down_payment" type="text" value="">
+            </div>
+            <label class="control-label">万元</label>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label">房型：</label>
+            <div class="col-sm-2">
+                <input class="form-control" id="shi" name="shi" type="text" value="">
+            </div>
+            <label class="col-sm-1 control-label" for="shi">室</label>
+            <div class="col-sm-2">
+                <input class="form-control" id="ting" name="ting" type="text" value="">
+            </div>
+            <label class="col-sm-1 control-label" for="ting">厅</label>
+            <div class="col-sm-2">
+                <input class="form-control" id="wei" name="wei" type="text" value="">
+            </div>
+            <label class="col-sm-1 control-label" for="wei">卫</label>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label" for="test">房屋情况：</label>
+            <div class="col-sm-2">
+                {{ form.type(class="control-label") }}
+            </div>
+            <div class="col-sm-2">
+                {{ form.decoration(class="control-label") }}
+            </div>
+            <div class="col-sm-1">
+                {{ form.toward(class="control-label") }}
+            </div>
+            <div class="col-sm-8"></div>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label" for="floor">楼层：</label>
+            <div class="col-sm-2">
+                <input class="form-control" id="floor" name="floor" type="text" value="">
+            </div>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label" for="total_floor">总层数：</label>
+            <div class="col-sm-2">
+                <input class="form-control" id="total_floor" name="total_floor" type="text" value="">
+            </div>
+        </div>
+        <div class="page-header">
+            <h3>详细信息</h3>
+        </div>
+        <div class="form-group  required">
+            <label class="col-sm-2 control-label" for="title">房源标题：</label>
+            <div class="col-sm-10">
+                <input class="form-control" id="title" name="title" required type="text" value="">
+            </div>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label" for="detail">房源描述：</label>
+            <textarea class="form-control" id="detail" name="detail"></textarea>
+        </div>
+        <input class="btn btn-default" id="submit" name="submit" type="submit" value="发布">
+</form>
+</div>
+{% endblock %}
