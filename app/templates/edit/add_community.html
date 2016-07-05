@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}房子网{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>添加小区信息</h1>
+</div>
+<div class="divider"></div>
+<div class="row">
+    <div class="col-md-8">
+        <select name="district" type="select" id="id_district">
+            <option value="">请选择</option>
+            <option value="1">宝山</option>
+            <option value="2">青浦</option>
+            <option value="3">黄浦</option>
+        </select>
+    </div>
+</div>
+{% endblock %}

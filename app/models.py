@@ -65,7 +65,7 @@ class District(db.Model):
     __tablename__ = 'districts'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
-    db.relationship('Area', backref='district', lazy='dynamic')
+    areas = db.relationship('Area', backref='district', lazy='dynamic')
 
     @staticmethod
     def insert_districts():
@@ -88,7 +88,19 @@ class Area(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
-    db.relationship('Community', backref='area', lazy='dynamic')
+    communities = db.relationship('Community', backref='area', lazy='dynamic')
+
+    @staticmethod
+    def insert_areas():
+        qingpu = ['白鹤', '华新镇', '青浦新城', '徐泾', '朱家角', '赵巷', '重固', '其他']
+        hongkou = ['北外滩', '临平路', '四川北路', '其他']
+        districts = {'青浦区': qingpu, '虹口区': hongkou}
+        for district, areas in districts.items():
+            d = District.query.filter_by(name=district).first()
+            for area in areas:
+                a = Area(name=area, district=d)
+                db.session.add(a)
+        db.session.commit()
 
     def __repr__(self):
         return self.name
@@ -99,7 +111,7 @@ class Community(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     position_id = db.Column(db.Integer, db.ForeignKey('areas.id'))
-    db.relationship('House', backref='community', lazy='dynamic')
+    houses = db.relationship('House', backref='community', lazy='dynamic')
 
     def __repr__(self):
         return self.name

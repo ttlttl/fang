@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-
+{% block head %}
+<script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
+{{ super() }}
+{% endblock %}
 {% block title %}房子网 - 添加二手房{% endblock %}
 
 {% block page_content %}
@@ -12,56 +15,55 @@
 </div>
 <form action="" method="post" class="form-horizontal" role="form">
         {{ form.hidden_tag() }}
-    {{form.errors}}
         <div class="form-group ">
             {{ form.total_area.label(class="col-sm-2 control-label")}}
-            <div class="col-sm-4">
-                <input class="form-control" id="total_area" name="total_area" type="text" value="">
+            <div class="col-sm-2">
+                {{ form.total_area(class="form-control") }}
             </div>
             <label class="control-label">平米</label>
         </div>
         <div class="form-group ">
-            <label class="col-sm-2 control-label" for="price">{{form.price.label}}</label>
-            <div class="col-sm-4">
-                <input class="form-control" id="price" name="price" type="text" value="">
+            {{ form.price.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-2">
+                {{ form.price(class="form-control") }}
             </div>
             <label class="control-label">万元</label>
         </div>
         <div class="form-group ">
-            <label class="col-sm-2 control-label" for="total_price">总价：</label>
-            <div class="col-sm-4">
-                <input class="form-control" id="total_price" name="total_price" type="text" value="">
+            {{ form.total_price.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-2">
+                {{ form.total_price(class="form-control") }}
             </div>
             <label class="control-label">万元</label>
         </div>
         <div class="form-group ">
-            <label class="col-sm-2 control-label" for="down_payment">最低首付：</label>
-            <div class="col-sm-4">
-                <input class="form-control" id="down_payment" name="down_payment" type="text" value="">
+            {{ form.down_payment.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-2">
+                {{ form.down_payment(class="form-control") }}
             </div>
             <label class="control-label">万元</label>
         </div>
         <div class="form-group ">
             <label class="col-sm-2 control-label">房型：</label>
             <div class="col-sm-2">
-                <input class="form-control" id="shi" name="shi" type="text" value="">
+                {{ form.shi(class="form-control") }}
             </div>
-            <label class="col-sm-1 control-label" for="shi">室</label>
+            {{ form.shi.label(class="col-sm-1 control-label") }}
             <div class="col-sm-2">
-                <input class="form-control" id="ting" name="ting" type="text" value="">
+                {{ form.ting(class="form-control") }}
             </div>
-            <label class="col-sm-1 control-label" for="ting">厅</label>
+            {{ form.ting.label(class="col-sm-1 control-label") }}
             <div class="col-sm-2">
-                <input class="form-control" id="wei" name="wei" type="text" value="">
+                {{ form.wei(class="form-control") }}
             </div>
-            <label class="col-sm-1 control-label" for="wei">卫</label>
+            {{ form.wei.label(class="col-sm-1 control-label") }}
         </div>
         <div class="form-group ">
-            <label class="col-sm-2 control-label" for="test">房屋情况：</label>
-            <div class="col-sm-2">
+            <label class="col-sm-2 control-label">房屋情况：</label>
+            <div class="col-sm-1">
                 {{ form.type(class="control-label") }}
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-1">
                 {{ form.decoration(class="control-label") }}
             </div>
             <div class="col-sm-1">
@@ -70,31 +72,37 @@
             <div class="col-sm-8"></div>
         </div>
         <div class="form-group ">
-            <label class="col-sm-2 control-label" for="floor">楼层：</label>
+            {{ form.floor.label(class="col-sm-2 control-label") }}
             <div class="col-sm-2">
-                <input class="form-control" id="floor" name="floor" type="text" value="">
+                {{ form.floor(class="form-control") }}
             </div>
         </div>
         <div class="form-group ">
-            <label class="col-sm-2 control-label" for="total_floor">总层数：</label>
+            {{ form.total_floor.label(class="col-sm-2 control-label") }}
             <div class="col-sm-2">
-                <input class="form-control" id="total_floor" name="total_floor" type="text" value="">
+                {{ form.total_floor(class="form-control") }}
             </div>
         </div>
         <div class="page-header">
             <h3>详细信息</h3>
         </div>
-        <div class="form-group  required">
-            <label class="col-sm-2 control-label" for="title">房源标题：</label>
+        <div class="form-group">
+            {{ form.title.label(class="col-sm-2 control-label") }}
             <div class="col-sm-10">
-                <input class="form-control" id="title" name="title" required type="text" value="">
+                {{ form.title(class="form-control") }}
             </div>
         </div>
         <div class="form-group ">
-            <label class="col-sm-2 control-label" for="detail">房源描述：</label>
-            <textarea class="form-control" id="detail" name="detail"></textarea>
+            {{ form.detail.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-10">
+            {{ form.detail(class="form-control") }}
+            <script>CKEDITOR.replace('detail');</script>
+            </div>
         </div>
-        <input class="btn btn-default" id="submit" name="submit" type="submit" value="发布">
+        <div class="form-group">
+            <div class="col-sm-2"></div>
+                {{ form.submit(class="btn btn-default") }}
+        </div>
 </form>
 </div>
 {% endblock %}
