@@ -52,7 +52,6 @@ def add_user():
                     password=form.password.data,
                     is_admin=form.is_admin.data)
         db.session.add(user)
-        db.session.commit()
         flash('添加成功')
         return redirect(url_for('auth.user_management'))
     return render_template('auth/add_user.html', form=form)
@@ -65,7 +64,6 @@ def status_user(id):
     user = User.query.get_or_404(id)
     user.actived = not user.actived
     db.session.add(user)
-    db.session.commit()
     return redirect(url_for('auth.user_management'))
 
 

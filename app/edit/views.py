@@ -32,6 +32,8 @@ def add_community():
                 flash("街道信息错误")
             community = Community(name=community_name, area=area)
             db.session.add(community)
+            flash("添加小区信息成功")
+            return redirect(url_for('.add_community'))
     districts = District.query.all()
     return render_template('edit/add_community.html', districts=districts)
 
@@ -41,6 +43,10 @@ def add_community():
 def publish2():
     form = AddUsedHouseForm(csrf_enabled=False)
     if form.validate_on_submit():
+        community = Community.query.filter_by(name=form.community_name.data).first()
+        if not community:
+            flash("小区不存在，请先添加小区信息")
+            return redirect(url_for(".add_community"))
         house = House(title = form.title.data,
                       is_new = False,
                       type = form.type.data,
@@ -56,9 +62,9 @@ def publish2():
                       total_price = form.total_price.data,
                       down_payment = form.down_payment.data,
                       detail = form.detail.data,
-                      author = current_user._get_current_object() )
+                      author = current_user._get_current_object(),
+                      community=community)
         db.session.add(house)
-        db.session.commit()
         flash('发布成功')
         return redirect(url_for('.publish2'))
     return render_template('edit/publish2.html', form=form)
