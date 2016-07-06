@@ -1,7 +1,5 @@
 # -*- coding=UTF-8 -*-
 import unittest
-import timeit
-from datetime import datetime
 from app import create_app, db
 from app.models import User
 
