@@ -4,7 +4,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from . import edit
 from .. import db
 from .forms import AddUsedHouseForm
-from ..models import District, House, Area
+from ..models import District, House, Community, Area
 
 
 @edit.route('/location_info')
@@ -16,15 +16,24 @@ def location_info():
 
 @edit.route('/get_areas_by_district/<int:id>', methods=['GET'])
 def get_areas_by_district_id(id):
-    areas = District.query.filter_by(id=id).first().areas.all()
-    print(areas)
-    return jsonify({area.id:area.name for area in areas})
+    areas = District.query.get(id).areas.all()
+    return jsonify({"areas": [{ "id":area.id, "name":area.name} for area in areas]})
 
 
 @edit.route('/add_community', methods=['GET', 'POST'])
 @login_required
 def add_community():
-    return render_template('edit/add_community.html')
+    if request.method == 'POST':
+        area_id = request.form['area_id']
+        community_name = request.form['community_name']
+        if area_id and community_name:
+            area = Area.query.get(area_id)
+            if not area:
+                flash("街道信息错误")
+            community = Community(name=community_name, area=area)
+            db.session.add(community)
+    districts = District.query.all()
+    return render_template('edit/add_community.html', districts=districts)
 
 
 @edit.route('/publish2', methods=['GET', 'POST'])

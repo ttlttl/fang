@@ -4,10 +4,6 @@ from wtforms import StringField, BooleanField, SubmitField, IntegerField, Select
 from wtforms.validators import DataRequired, Length
 
 
-class AddCommunityForm(Form):
-    pass
-
-
 class AddUsedHouseForm(Form):
     total_area = IntegerField('面积')
     price = IntegerField('价格')

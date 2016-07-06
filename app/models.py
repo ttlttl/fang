@@ -110,7 +110,7 @@ class Community(db.Model):
     __tablename__ = 'communities'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
-    position_id = db.Column(db.Integer, db.ForeignKey('areas.id'))
+    area_id = db.Column(db.Integer, db.ForeignKey('areas.id'))
     houses = db.relationship('House', backref='community', lazy='dynamic')
 
     def __repr__(self):
