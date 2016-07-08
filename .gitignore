@@ -90,3 +90,6 @@ ENV/
 
 #Pycharm project settings
 .idea
+
+#upload files
+app/static/upload

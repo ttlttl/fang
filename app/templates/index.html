@@ -1,12 +1,28 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
 
 {% block title %}房子网{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-    <h1>你好，{% if current_user.is_authenticated %}{{ current_user.username }}{% else %}朋友{% endif %}!</h1>
+<div class="post-tabs">
+    <ul class="nav nav-tabs">
+        <li{% if not show_used_house %} class="active"{% endif %}>
+            <a href="#"><h3>新房</h3></a>
+        </li>
+        <li{% if show_show_used_house %} class="active"{% endif %}>
+            <a href="#"><h3>二手房</h3></a>
+        </li>
+    </ul>
+    <div class="row">
+        <div class="col-md-12">
+            {% include '_posts.html' %}
+        </div>
+    </div>
 </div>
-<div>
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.index') }}
 </div>
+{% endif %}
 {% endblock %}
