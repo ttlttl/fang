@@ -2,7 +2,8 @@
 import os
 import datetime
 import random
-from flask import render_template, redirect, request, url_for, flash, jsonify, current_app, make_response
+from flask import render_template, redirect, request, url_for, flash, \
+    jsonify, current_app, make_response, send_from_directory
 from flask_login import login_user, logout_user, login_required, current_user
 from . import edit
 from .. import db
@@ -109,3 +110,27 @@ def imgUpload():
     response = make_response(res)
     response.headers["Content-Type"] = "text/html"
     return response
+
+
+@edit.route('/test')
+def test():
+    return render_template('edit/test.html')
+
+@edit.route('/upload', methods=['POST'])
+@login_required
+def upload():
+    upload_files = request.files.getlist('file[]')
+    filenames = []
+    for file in upload_files:
+        if file:
+            fext = os.path.splitext(file.filename)[-1]
+            rnd_name = '%s%s' % (gen_rnd_filename(), fext)
+            filepath = os.path.join(current_app.static_folder, 'upload', rnd_name)
+            file.save(filepath)
+            filenames.append(rnd_name)
+    return render_template('edit/upload.html', filenames=filenames)
+
+
+@edit.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(os.path.join(current_app.static_folder, 'upload'), filename)
