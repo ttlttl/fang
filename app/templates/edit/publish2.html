@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block head %}
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/webuploader/0.1.0/webuploader.html5only.js"></script>
 <script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
 {{ super() }}
 {% endblock %}
@@ -50,22 +52,40 @@
             <label class="control-label">万元</label>
         </div>
         <div class="form-group ">
-            <label class="col-sm-2 control-label">房型：</label>
+            <label class="col-sm-2 control-label">房型</label>
             <div class="col-sm-2">
-                {{ form.shi(class="form-control") }}
+                <div class="row">
+                    <div class="col-sm-8">
+                        {{ form.shi(class="form-control") }}
+                    </div>
+                    <div class="col-sm-4">
+                        {{ form.shi.label(class="control-label") }}
+                    </div>
+                </div>
             </div>
-            {{ form.shi.label(class="col-sm-1 control-label") }}
             <div class="col-sm-2">
-                {{ form.ting(class="form-control") }}
+                <div class="row">
+                    <div class="col-sm-8">
+                        {{ form.ting(class="form-control") }}
+                    </div>
+                    <div class="col-sm-4">
+                        {{ form.ting.label(class="control-label") }}
+                    </div>
+                </div>
             </div>
-            {{ form.ting.label(class="col-sm-1 control-label") }}
             <div class="col-sm-2">
-                {{ form.wei(class="form-control") }}
+                <div class="row">
+                    <div class="col-sm-8">
+                        {{ form.wei(class="form-control") }}
+                    </div>
+                    <div class="col-sm-4">
+                        {{ form.wei.label(class="control-label") }}
+                    </div>
+                </div>
             </div>
-            {{ form.wei.label(class="col-sm-1 control-label") }}
         </div>
         <div class="form-group ">
-            <label class="col-sm-2 control-label">房屋情况：</label>
+            <label class="col-sm-2 control-label">房屋情况</label>
             <div class="col-sm-1">
                 {{ form.type(class="control-label") }}
             </div>
@@ -98,12 +118,118 @@
                 {{ form.title(class="form-control") }}
             </div>
         </div>
-        <div class="form-group ">
+        <div class="form-group">
             {{ form.detail.label(class="col-sm-2 control-label") }}
             <div class="col-sm-10">
             {{ form.detail(class="form-control") }}
             <script>CKEDITOR.replace('detail', {filebrowserImageUploadUrl: '/edit/imgUpload/'});</script>
             </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-sm-2 control-label">上传图片</label>
+                <div class="col-sm-2" id="filePicker">选择图片</div>
+
+                <div class="col-sm-8" id="uploadbox">
+                <div id="fileList" class="uploader-list"></div>
+            </div>
+            </div>
+
+
+
+            <script>
+            $(function() {
+                $list = $('#fileList'),
+                // 优化retina, 在retina下这个值是2
+                ratio = window.devicePixelRatio || 1,
+
+                // 缩略图大小
+                thumbnailWidth = 100 * ratio,
+                thumbnailHeight = 100 * ratio,
+                // 初始化Web Uploader
+                uploader = WebUploader.create({
+                    // 自动上传。
+                    auto: true,
+                    // 文件接收服务端。
+                    server: '{{url_for('edit.upload')}}',
+
+                    // 选择文件的按钮。可选。
+                    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+                    pick: '#filePicker',
+
+                    // 只允许选择文件，可选。
+                    accept: {
+                        title: 'Images',
+                        extensions: 'gif,jpg,jpeg,bmp,png',
+                        mimeTypes: 'image/*'
+                    }
+                });
+
+                // 当有文件添加进来的时候
+                uploader.on( 'fileQueued', function( file ) {
+                    var $li = $('<div class="col-sm-2">' +
+                            '<div id="' + file.id + '" class="file-item thumbnail">' +
+                                '<img>' +
+                                '<div class="info">' + file.name + '</div>' +
+                            '</div>'
+                            + '</div>'
+                            ),
+                        $img = $li.find('img');
+
+                    $list.append( $li );
+
+                    // 创建缩略图
+                    uploader.makeThumb( file, function( error, src ) {
+                        if ( error ) {
+                            $img.replaceWith('<span>不能预览</span>');
+                            return;
+                        }
+
+                        $img.attr( 'src', src );
+                    }, thumbnailWidth, thumbnailHeight );
+                });
+
+                // 文件上传过程中创建进度条实时显示。
+                uploader.on( 'uploadProgress', function( file, percentage ) {
+                    var $li = $( '#'+file.id ),
+                        $percent = $li.find('.progress span');
+
+                    // 避免重复创建
+                    if ( !$percent.length ) {
+                        $percent = $('<p class="progress"><span></span></p>')
+                                .appendTo( $li )
+                                .find('span');
+                    }
+
+                    $percent.css( 'width', percentage * 100 + '%' );
+                });
+
+                // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+                uploader.on( 'uploadSuccess', function( file, response ) {
+                    $( '#'+file.id ).addClass('upload-state-done');
+                    console.log(response)
+                    $( '#'+file.id ).find(".info").first().html(response['filename'])
+                });
+
+                // 文件上传失败，现实上传出错。
+                uploader.on( 'uploadError', function( file ) {
+                    var $li = $( '#'+file.id ),
+                        $error = $li.find('div.error');
+
+                    // 避免重复创建
+                    if ( !$error.length ) {
+                        $error = $('<div class="error"></div>').appendTo( $li );
+                    }
+
+                    $error.text('上传失败');
+                });
+
+                // 完成上传完了，成功或者失败，先删除进度条。
+                uploader.on( 'uploadComplete', function( file ) {
+                    $( '#'+file.id ).find('.progress').remove();
+                });
+            });
+            </script>
         </div>
         <div class="form-group">
             <div class="col-sm-2"></div>

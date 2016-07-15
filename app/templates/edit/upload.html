@@ -1,30 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
- <head>
-  <link href="bootstrap/3.0.0/css/bootstrap.min.css"
-     rel="stylesheet">
- </head>
- <body>
-  <div class="container">
-   <div class="header">
-    <h3 class="text-muted">Uploaded files</h3>
-   </div>
-   <hr/>
-   <div>
-   This is a list of the files you just uploaded, click on them to load/download them
-   <ul>
-    {% for file in filenames %}
-     <li><a href="{{url_for('static', filename='%s/%s' % ('upload', file))}}">{{file}}</a>
-     <img src="{{url_for('static', filename='%s/%s' % ('upload', file))}}" \>
-     </li>
-    {% endfor %}
-   </ul>
-   </div>
-   <div class="header">
-    <h3 class="text-muted">Code to manage a Upload</h3>
-   </div>
-   <hr/>
-   </div>
-  </div>
- </body>
-</html>
+
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/webuploader/0.1.0/webuploader.html5only.js"></script>
+
+<style>
+*{ margin:0; padding:0;}
+#uploadbox{ margin:50px auto; width:540px; min-height:400px; background:#FF9}
+#demo{ margin:50px auto; width:540px; min-height:800px; background:#CF9}
+</style>
+
+<div id="uploadbox">
+    <!--用来存放item-->
+    <div id="fileList" class="uploader-list"></div>
+    <div id="filePicker">选择图片</div>
+</div>
+
+<script>
+$(function() {
+    $list = $('#fileList'),
+    // 优化retina, 在retina下这个值是2
+    ratio = window.devicePixelRatio || 1,
+
+    // 缩略图大小
+    thumbnailWidth = 100 * ratio,
+    thumbnailHeight = 100 * ratio,
+    // 初始化Web Uploader
+    uploader = WebUploader.create({
+        // 自动上传。
+        auto: true,
+        // 文件接收服务端。
+        server: '{{url_for('edit.upload')}}',
+
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: '#filePicker',
+
+        // 只允许选择文件，可选。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
+    });
+
+    // 当有文件添加进来的时候
+    uploader.on( 'fileQueued', function( file ) {
+        var $li = $(
+                '<div id="' + file.id + '" class="file-item thumbnail">' +
+                    '<img>' +
+                    '<div class="info">' + file.name + '</div>' +
+                '</div>'
+                ),
+            $img = $li.find('img');
+
+        $list.append( $li );
+
+        // 创建缩略图
+        uploader.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+
+            $img.attr( 'src', src );
+        }, thumbnailWidth, thumbnailHeight );
+    });
+
+    // 文件上传过程中创建进度条实时显示。
+    uploader.on( 'uploadProgress', function( file, percentage ) {
+        var $li = $( '#'+file.id ),
+            $percent = $li.find('.progress span');
+
+        // 避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<p class="progress"><span></span></p>')
+                    .appendTo( $li )
+                    .find('span');
+        }
+
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+
+    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+    uploader.on( 'uploadSuccess', function( file, response ) {
+        $( '#'+file.id ).addClass('upload-state-done');
+        console.log(response)
+        $( '.info' ).html(response['filename'])
+    });
+
+    // 文件上传失败，现实上传出错。
+    uploader.on( 'uploadError', function( file ) {
+        var $li = $( '#'+file.id ),
+            $error = $li.find('div.error');
+
+        // 避免重复创建
+        if ( !$error.length ) {
+            $error = $('<div class="error"></div>').appendTo( $li );
+        }
+
+        $error.text('上传失败');
+    });
+
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploader.on( 'uploadComplete', function( file ) {
+        $( '#'+file.id ).find('.progress').remove();
+    });
+});
+</script>

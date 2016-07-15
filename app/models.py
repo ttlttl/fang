@@ -16,6 +16,7 @@ class User(UserMixin,db.Model):
     actived = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
     houses = db.relationship('House', backref='author', lazy='dynamic')
+    images = db.relationship('Image', backref='author', lazy='dynamic')
 
     @property
     def password(self):
@@ -173,4 +174,13 @@ class House(db.Model):
     hot = db.Column(db.SmallInteger, default=1)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     community_id = db.Column(db.Integer, db.ForeignKey('communities.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    images = db.relationship('Image', backref='house', lazy='dynamic')
+
+
+class Image(db.Model):
+    __tablename__ = 'images'
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(100))
+    house_id = db.Column(db.Integer, db.ForeignKey('houses.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))

@@ -3,12 +3,12 @@ import os
 import datetime
 import random
 from flask import render_template, redirect, request, url_for, flash, \
-    jsonify, current_app, make_response, send_from_directory
-from flask_login import login_user, logout_user, login_required, current_user
+    jsonify, current_app, make_response, session
+from flask_login import login_required, current_user
 from . import edit
 from .. import db
 from .forms import AddUsedHouseForm
-from ..models import District, House, Community, Area
+from ..models import District, House, Community, Area, Image
 
 
 @edit.route('/location_info')
@@ -42,12 +42,19 @@ def add_community():
     return render_template('edit/add_community.html', districts=districts)
 
 
+@edit.route('/community_management')
+@login_required
+def community_management():
+    pass
+
+
 @edit.route('/publish2', methods=['GET', 'POST'])
 @login_required
 def publish2():
     form = AddUsedHouseForm(csrf_enabled=False)
     if form.validate_on_submit():
         community = Community.query.filter_by(name=form.community_name.data).first()
+        print(community)
         if not community:
             flash("小区不存在，请先添加小区信息")
             return redirect(url_for(".add_community"))
@@ -69,6 +76,12 @@ def publish2():
                       author = current_user._get_current_object(),
                       community=community)
         db.session.add(house)
+        image_names = session.get('images')
+        if image_names is not None:
+            images = [Image(url=image_name, house=house) for image_name in image_names]
+            for image in images:
+                db.session.add(image)
+            session['images'].clear()
         flash('发布成功')
         return redirect(url_for('.publish2'))
     return render_template('edit/publish2.html', form=form)
@@ -112,25 +125,20 @@ def imgUpload():
     return response
 
 
-@edit.route('/test')
-def test():
-    return render_template('edit/test.html')
-
 @edit.route('/upload', methods=['POST'])
 @login_required
 def upload():
-    upload_files = request.files.getlist('file[]')
-    filenames = []
-    for file in upload_files:
-        if file:
-            fext = os.path.splitext(file.filename)[-1]
-            rnd_name = '%s%s' % (gen_rnd_filename(), fext)
-            filepath = os.path.join(current_app.static_folder, 'upload', rnd_name)
-            file.save(filepath)
-            filenames.append(rnd_name)
-    return render_template('edit/upload.html', filenames=filenames)
-
-
-@edit.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(os.path.join(current_app.static_folder, 'upload'), filename)
+    file = request.files.get('file')
+    if file:
+        fext = os.path.splitext(file.filename)[-1]
+        rnd_name = '%s%s' % (gen_rnd_filename(), fext)
+        filepath = os.path.join(current_app.static_folder, 'upload', rnd_name)
+        file.save(filepath)
+        if session.get('images') is None:
+            session['images'] = []
+        session['images'].append(rnd_name)
+        # mutable structures are not picked up automatically
+        session.modified = True
+        print(session['images'])
+        return jsonify({'result':'Success'})
+    return jsonify({'result':'Fail'})

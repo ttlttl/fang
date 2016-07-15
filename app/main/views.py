@@ -8,3 +8,8 @@ def index():
     pagination = House.query.order_by(House.timestamp.desc()).paginate(page, per_page=10, error_out=False)
     posts = pagination.items
     return render_template('index.html', posts=posts, pagination=pagination, show_used_house=True)
+
+
+@main.route('/detail')
+def detail():
+    pass

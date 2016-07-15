@@ -2,7 +2,7 @@
     {% for post in posts %}
     <li class="media">
         <a class="pull-left" href="#">
-            <img src="{{ url_for('static', filename='%s/%s' % ('upload', '201607071601312589.jpg'))}}" width="240" height="180">
+            <img src="{{ url_for('static', filename='%s/%s' % ('upload', post.images.first().url))}}" width="240" height="180">
         </a>
         <div class="meida-body">
             <div class="row">
