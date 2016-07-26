@@ -7,7 +7,7 @@ from flask import render_template, redirect, request, url_for, flash, \
 from flask_login import login_required, current_user
 from . import edit
 from .. import db
-from .forms import AddUsedHouseForm
+from .forms import AddUsedHouseForm, AddAreaForm, AddCommunityForm
 from ..models import District, House, Community, Area, Image
 
 
@@ -40,12 +40,6 @@ def add_community():
             return redirect(url_for('.add_community'))
     districts = District.query.all()
     return render_template('edit/add_community.html', districts=districts)
-
-
-@edit.route('/community_management')
-@login_required
-def community_management():
-    pass
 
 
 @edit.route('/publish2', methods=['GET', 'POST'])
@@ -142,3 +136,49 @@ def upload():
         print(session['images'])
         return jsonify({'result':'Success'})
     return jsonify({'result':'Fail'})
+
+
+@edit.route('/my_posts')
+@login_required
+def my_posts():
+    page = request.args.get('page', 1, type=int)
+    pagination = House.query.order_by(House.timestamp.desc()).paginate(
+        page, per_page=10, error_out=False
+    )
+    posts = pagination.items
+    return render_template('edit/my_posts.html', posts=posts, pagination=pagination)
+
+
+@edit.route('/districts')
+@login_required
+def districts():
+    districts = District.query.all()
+    return render_template('edit/districts.html', districts=districts)
+
+
+@edit.route('/areas/<int:id>', methods=['GET', 'POST'])
+@login_required
+def areas(id):
+    form = AddAreaForm()
+    district = District.query.get_or_404(id)
+    if form.validate_on_submit():
+        new_area = Area(name=form.area_name.data, district=district)
+        db.session.add(new_area)
+        flash('添加成功')
+        return redirect(url_for('edit.areas', id=id))
+    areas = district.areas
+    return render_template('edit/areas.html', form=form, areas=areas)
+
+
+@edit.route('/communities/<int:id>', methods=['GET', 'POST'])
+@login_required
+def communities(id):
+    form = AddCommunityForm()
+    area = Area.query.get_or_404(id)
+    if form.validate_on_submit():
+        new_community = Community(name=form.community_name.data, area=area)
+        db.session.add(new_community)
+        flash('添加成功')
+        return redirect(url_for('edit.communities', id=id))
+    communities = area.communities
+    return render_template('edit/communities.html', form=form, communities=communities)

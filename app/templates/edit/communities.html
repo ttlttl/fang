@@ -5,7 +5,12 @@
 
 {% block page_content %}
 <div class="page-header">
-    <h1>区县</h1>
+    <h1>小区</h1>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        {{ wtf.quick_form(form) }}
+    </div>
 </div>
 <div class="divider"></div>
 <div class="row">
@@ -19,11 +24,11 @@
                 </tr>
             </thread>
             <tbody>
-            {% for district in districts %}
+            {% for community in communities %}
                 <tr>
-                    <td>{{district.id}}</td>
-                    <td>{{district.name}}</td>
-                    <td><a href="{{ url_for('edit.areas', id=district.id) }}">管理</a></td>
+                    <td>{{community.id}}</td>
+                    <td>{{community.name}}</td>
+                    <td><a href="#">管理</a></td>
                 </tr>
             {% endfor %}
             </tbody>

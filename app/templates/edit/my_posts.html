@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}房子网{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>文章管理</h1>
+</div>
+<div class="divider"></div>
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-hover">
+            <thread>
+                <tr>
+                    <th>id</th>
+                    <th>标题</th>
+                    <th>作者</th>
+                    <th>发布日期</th>
+                </tr>
+            </thread>
+            <tbody>
+            {% for post in posts %}
+                <tr>
+                    <td>{{post.id}}</td>
+                    <td>{{post.title}}</td>
+                    <td>{{post.author.name}}</td>
+                    <td>{{post.timestamp}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% if pagination %}
+        <div class="pagination">
+            {{ macros.pagination_widget(pagination, 'auth.user_management') }}
+        </div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

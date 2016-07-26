@@ -26,7 +26,8 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ url_for('edit.publish2') }}">发布房源</a></li>
-                        <li><a href="{{ url_for('edit.community_management') }}">小区管理</a></li>
+                        <li><a href="{{ url_for('edit.my_posts') }}">我发布的</a></li>
+                        <li><a href="{{ url_for('edit.districts') }}">小区管理</a></li>
                         {% if current_user.is_administrator %}
                         <li><a href="{{ url_for('auth.user_management') }}">用户管理</a></li>
                         {% endif %}

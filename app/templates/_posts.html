@@ -1,24 +1,26 @@
 <ul class="media-list">
     {% for post in posts %}
     <li class="media">
-        <a class="pull-left" href="#">
-            <img src="{{ url_for('static', filename='%s/%s' % ('upload', post.images.first().url))}}" width="240" height="180">
-        </a>
-        <div class="meida-body">
-            <div class="row">
-                <div class="col-md-4">
-                                <h4>{{ post.title }}</h4>
-                    <p>{{post.total_area}}平方米</p>
-                    <p>{{post.floor}}层(共{{post.total_floor}}层)</p>
-                    <p>{{post.shi}}室/{{post.ting}}/厅{{post.wei}}/卫</p>
-                    <p>{{post.community}} [{{post.community.area.district}}-{{post.community.area}}]</p>
-                </div>
-
-                <div class="col-md-2">
-                    <h3><font color="red">{{post.total_price}}万元</font></h3>
-                </div>
+        <div class="row">
+            <div class="col-md-4">
+                <a class="pull-left" href="{{url_for('main.detail', id=post.id)}}">
+                    <img src="{{ url_for('static', filename='%s/%s' % ('upload', post.images.first().url))}}" width="240" height="180">
+                </a>
+            </div>
+            <div class="meida-body">
+                    <div class="col-md-4">
+                        <h4><a href="{{url_for('main.detail', id=post.id)}}">{{ post.title }}</a></h4>
+                        <p>{{post.total_area}}平方米</p>
+                        <p>{{post.floor}}层(共{{post.total_floor}}层)</p>
+                        <p>{{post.shi}}室/{{post.ting}}/厅{{post.wei}}/卫</p>
+                        <p>{{post.community}} [{{post.community.area.district}}-{{post.community.area}}]</p>
+                    </div>
+                    <div class="col-md-2 col-md-offset-2">
+                        <h3 class="text-right"><font color="red">{{post.total_price}}万元</font></h3>
+                    </div>
             </div>
         </div>
     </li>
+    <hr>
     {% endfor %}
 </ul>

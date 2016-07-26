@@ -5,24 +5,62 @@
 {% block title %}房子网{% endblock %}
 
 {% block page_content %}
-<div class="post-tabs">
-    <ul class="nav nav-tabs">
-        <li{% if not show_used_house %} class="active"{% endif %}>
-            <a href="#"><h3>新房</h3></a>
-        </li>
-        <li{% if show_show_used_house %} class="active"{% endif %}>
-            <a href="#"><h3>二手房</h3></a>
-        </li>
-    </ul>
-    <div class="row">
-        <div class="col-md-12">
-            {% include '_posts.html' %}
+<ol class="breadcrumb">
+  <li><a href="{{ url_for('main.index') }}">主页</a></li>
+  <li><a href="{{ url_for('main.esf') }}">二手房</a></li>
+  <li class="active">青浦区</li>
+</ol>
+<div class="page-header">
+    <h2>{{post.title}}</h2>
+    <h4><font color="red">{{post.total_price}}万</font> | {{post.shi}}室{{post.ting}}厅{{post.wei}}卫|{{post.total_area}}平方米</h4>
+</div>
+<div class="divider"></div>
+<div class="row">
+    <div class="col-md-7">
+        <div id="myCarousel" class="carousel slide">
+           <!-- 轮播（Carousel）指标 -->
+           <ol class="carousel-indicators">
+               {% for _ in images %}
+               {% if loop.index0 == 0 %}
+              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+               {% else %}
+              <li data-target="#myCarousel" data-slide-to="{{loop.index0}}"></li>
+               {% endif %}
+                {% endfor %}
+           </ol>
+           <!-- 轮播（Carousel）项目 -->
+           <div class="carousel-inner">
+            {% for image in images %}
+               {% if loop.index == 1 %}
+                <div class="item active">
+                    <img  src="{{ url_for('static', filename='%s/%s' % ('upload', images.first().url)) }}" alt="First slide">
+               </div>
+               {% else %}
+              <div class="item ">
+                    <img  src="{{ url_for('static', filename='%s/%s' % ('upload', image.url)) }}" alt="First slide">
+              </div>
+               {% endif %}
+           {% endfor %}
+           </div>
+           <!-- 轮播（Carousel）导航 -->
+           <a class="carousel-control left" href="#myCarousel"
+              data-slide="prev">&lsaquo;</a>
+           <a class="carousel-control right" href="#myCarousel"
+              data-slide="next">&rsaquo;</a>
         </div>
     </div>
+    <div class="col-md-5">
+        <p>建筑面积：{{post.total_area}}平方米</p>
+        <p>所在楼层：{{post.floor}}层(共{{post.total_floor}}层)</p>
+        <p>房屋类型：{{post.shi}}室/{{post.ting}}/厅{{post.wei}}/卫</p>
+        <p>所在区域：{{post.community}} [{{post.community.area.district}}-{{post.community.area}}]</p>
+    </div>
 </div>
-{% if pagination %}
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, '.index') }}
+<hr>
+<div class="row">
+    <div class="col-md-8">
+        {{post.detail | safe}}
+    </div>
 </div>
-{% endif %}
+
 {% endblock %}

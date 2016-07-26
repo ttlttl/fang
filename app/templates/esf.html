@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}房子网{% endblock %}
+
+{% block page_content %}
+<ol class="breadcrumb">
+  <li><a href="{{ url_for('main.index') }}">主页</a></li>
+  <li class="active"><a href="{{ url_for('main.esf') }}">二手房</a></li>
+</ol>
+<dl>
+    <dt>区&nbsp;域</dt>
+    {% for district in districts %}
+    <dd>
+        <a href="#">{{district.name}}</a>
+    </dd>
+    {% endfor %}
+</dl>
+
+{% endblock %}

@@ -26,3 +26,13 @@ class AddUsedHouseForm(Form):
     submit = SubmitField('发布')
 
 
+class AddAreaForm(Form):
+    area_name = StringField('街道名称', validators=[DataRequired(), Length(1, 200)])
+    submit = SubmitField('添加')
+
+
+class AddCommunityForm(Form):
+    community_name = StringField('小区名称', validators=[DataRequired(), Length(1, 200)])
+    submit = SubmitField('添加')
+
+
