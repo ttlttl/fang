@@ -9,6 +9,7 @@ from . import edit
 from .. import db
 from .forms import AddUsedHouseForm, AddAreaForm, AddCommunityForm
 from ..models import District, House, Community, Area, Image
+from ..decorators import admin_required
 
 
 @edit.route('/location_info')
@@ -18,10 +19,17 @@ def location_info():
     return render_template('edit/location_info.html', districts=districts)
 
 
-@edit.route('/get_areas_by_district/<int:id>', methods=['GET'])
-def get_areas_by_district_id(id):
+@edit.route('/get_areas_json/<int:id>')
+def get_areas_json(id):
     areas = District.query.get(id).areas.all()
     return jsonify({"areas": [{ "id":area.id, "name":area.name} for area in areas]})
+
+
+@edit.route('/get_communities_json/<int:id>')
+def get_communities_json(id):
+    communities = Area.query.get(id).communities.all()
+    return jsonify({"communities": [{"id": community.id, "name":community.name} \
+                                    for community in communities]})
 
 
 @edit.route('/add_community', methods=['GET', 'POST'])
@@ -45,10 +53,10 @@ def add_community():
 @edit.route('/publish2', methods=['GET', 'POST'])
 @login_required
 def publish2():
-    form = AddUsedHouseForm(csrf_enabled=False)
+    form = AddUsedHouseForm()
     if form.validate_on_submit():
         community = Community.query.filter_by(name=form.community_name.data).first()
-        print(community)
+        print('................',community)
         if not community:
             flash("小区不存在，请先添加小区信息")
             return redirect(url_for(".add_community"))
@@ -167,7 +175,7 @@ def areas(id):
         flash('添加成功')
         return redirect(url_for('edit.areas', id=id))
     areas = district.areas
-    return render_template('edit/areas.html', form=form, areas=areas)
+    return render_template('edit/areas.html', form=form, district=district, areas=areas)
 
 
 @edit.route('/communities/<int:id>', methods=['GET', 'POST'])
@@ -181,4 +189,30 @@ def communities(id):
         flash('添加成功')
         return redirect(url_for('edit.communities', id=id))
     communities = area.communities
-    return render_template('edit/communities.html', form=form, communities=communities)
+    return render_template('edit/communities.html', form=form, area=area, communities=communities)
+
+
+@edit.route('/houses/<int:id>')
+@login_required
+def houses(id):
+    community = Community.query.get_or_404(id)
+    houses = community.houses
+    return render_template('edit/houses.html', community=community, houses=houses)
+
+
+@edit.route('/all_houses')
+@login_required
+def all_houses():
+    houses = House.query.all()
+    return render_template('edit/all_houses.html', houses=houses)
+
+
+@edit.route('/delete_house/<int:id>')
+@login_required
+@admin_required
+def delete_house(id):
+    referer = request.headers.get('Referer')
+    house = House.query.get(id)
+    db.session.delete(house)
+    flash('删除成功！')
+    return redirect(referer)

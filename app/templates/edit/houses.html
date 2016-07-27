@@ -7,15 +7,12 @@
 <ol class="breadcrumb">
   <li><a href="{{ url_for('main.index') }}">主页</a></li>
   <li><a href="{{ url_for('edit.districts') }}">上海</a></li>
-  <li class="active">{{ district.name }}</li>
+  <li><a href="{{ url_for('edit.areas', id=community.area.district.id) }}">{{community.area.district.name}}</a></li>
+  <li><a href="{{ url_for('edit.communities', id=community.area.id) }}">{{community.area.name}}</a></li>
+  <li class="active">{{community.name}}</li>
 </ol>
 <div class="page-header">
-    <h1>街道</h1>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        {{ wtf.quick_form(form) }}
-    </div>
+    <h1>房源</h1>
 </div>
 <div class="divider"></div>
 <div class="row">
@@ -25,15 +22,17 @@
                 <tr>
                     <th>id</th>
                     <th>名称</th>
-                    <th>管理</th>
+                    <th>编辑</th>
+                    <th>删除</th>
                 </tr>
             </thread>
             <tbody>
-            {% for area in areas %}
+            {% for house in houses %}
                 <tr>
-                    <td>{{area.id}}</td>
-                    <td>{{area.name}}</td>
-                    <td><a href="{{ url_for('edit.communities', id=area.id) }}">管理</a></td>
+                    <td>{{house.id}}</td>
+                    <td>{{house.title}}</td>
+                    <td><a href="{{ url_for('main.detail', id=house.id) }}">编辑</a></td>
+                    <td><a href="#">删除</a></td>
                 </tr>
             {% endfor %}
             </tbody>

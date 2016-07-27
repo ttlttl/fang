@@ -4,6 +4,12 @@
 {% block title %}房子网{% endblock %}
 
 {% block page_content %}
+<ol class="breadcrumb">
+  <li><a href="{{ url_for('main.index') }}">主页</a></li>
+  <li><a href="{{ url_for('edit.districts') }}">上海</a></li>
+  <li><a href="{{ url_for('edit.areas', id=area.district.id) }}">{{area.district.name}}</a></li>
+  <li class="active">{{area.name}}</li>
+</ol>
 <div class="page-header">
     <h1>小区</h1>
 </div>
@@ -28,7 +34,7 @@
                 <tr>
                     <td>{{community.id}}</td>
                     <td>{{community.name}}</td>
-                    <td><a href="#">管理</a></td>
+                    <td><a href="{{ url_for('edit.houses', id=community.id) }}">管理</a></td>
                 </tr>
             {% endfor %}
             </tbody>

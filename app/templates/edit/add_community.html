@@ -50,7 +50,7 @@ $(function(){
         $.ajax({
             type: "GET",
             dateType: "json",
-            url: "get_areas_by_district/"+id,
+            url: "get_areas_json/"+id,
             success: function(data){
                 var jsonObj=data["areas"];
                 var optionString="";
