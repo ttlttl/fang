@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, Length
 
 
 class AddUsedHouseForm(Form):
+    new_or_used = SelectField('新旧', choices=[('-1', '新旧情况'), ('0', '二手房'), ('1', '新房')])
     community_name = StringField('小区名称', validators=[DataRequired(), Length(1,200)])
     total_area = IntegerField('面积', validators=[DataRequired()])
     price = IntegerField('价格', validators=[DataRequired()])
@@ -28,11 +29,13 @@ class AddUsedHouseForm(Form):
 
 class AddAreaForm(Form):
     area_name = StringField('街道名称', validators=[DataRequired(), Length(1, 200)])
+    en_name = StringField('拼音', validators=[DataRequired(), Length(1, 64)])
     submit = SubmitField('添加')
 
 
 class AddCommunityForm(Form):
     community_name = StringField('小区名称', validators=[DataRequired(), Length(1, 200)])
+    en_name = StringField('拼音', validators=[DataRequired(), Length(1, 64)])
     submit = SubmitField('添加')
 
 

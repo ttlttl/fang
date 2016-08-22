@@ -15,16 +15,19 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://test:hello@192.168.111.163/fang_dev"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://test:hello@127.0.0.1/fang_dev"
+    WHOOSH_BASE = "fang_dev"
 
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://test:hello@192.168.111.163/fang_test"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://test:hello@127.0.0.1/fang_test"
+    WHOOSH_BASE = "mysql+pymysql://test:hello@127.0.0.1/fang_test"
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://test:hello@192.168.111.163/fang"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://test:hello@127.0.0.1/fang"
+    WHOOSH_BASE = "mysql+pymysql://test:hello@127.0.0.1/fang"
 
 
 config = {

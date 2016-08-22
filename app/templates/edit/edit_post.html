@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block head %}
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/webuploader/0.1.0/webuploader.html5only.js"></script>
+<script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
+{{ super() }}
+{% endblock %}
+{% block title %}房子网 - 编辑二手房{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>编辑二手房信息</h1>
+</div>
+<div class="page-header">
+    <h3>基本信息</h3>
+</div>
+<form action="" method="post" class="form-horizontal" role="form">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.total_area, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        {{ wtf.form_field(form.price, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        {{ wtf.form_field(form.total_price, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        {{ wtf.form_field(form.down_payment, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        {{ wtf.form_field(form.shi, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        {{ wtf.form_field(form.ting, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        {{ wtf.form_field(form.wei, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        {{ wtf.form_field(form.floor, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        {{ wtf.form_field(form.total_floor, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        <div class="form-group ">
+            <label class="col-sm-2 control-label">房屋情况</label>
+            <div class="col-sm-1">
+                {{ form.type(class="control-label") }}
+            </div>
+            <div class="col-sm-1">
+                {{ form.decoration(class="control-label") }}
+            </div>
+            <div class="col-sm-1">
+                {{ form.toward(class="control-label") }}
+            </div>
+            <div class="col-sm-8"></div>
+        </div>
+        <div class="page-header">
+            <h3>详细信息</h3>
+        </div>
+        <div class="form-group">
+            {{ form.title.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-10">
+                {{ form.title(class="form-control") }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form.detail.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-10">
+                    {{ form.detail }}
+            <script>CKEDITOR.replace('detail', {filebrowserImageUploadUrl: '/edit/imgUpload/'});</script>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2"></div>
+                {{ form.submit(class="btn btn-default") }}
+        </div>
+</form>
+</div>
+{% endblock %}

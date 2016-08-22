@@ -1,66 +1,120 @@
-{% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
-{% import "_macros.html" as macros %}
+{% extends "_base.html" %}
 
 {% block title %}房子网{% endblock %}
 
-{% block page_content %}
-<ol class="breadcrumb">
-  <li><a href="{{ url_for('main.index') }}">主页</a></li>
-  <li><a href="{{ url_for('main.esf') }}">二手房</a></li>
-  <li class="active">青浦区</li>
-</ol>
-<div class="page-header">
-    <h2>{{post.title}}</h2>
-    <h4><font color="red">{{post.total_price}}万</font> | {{post.shi}}室{{post.ting}}厅{{post.wei}}卫|{{post.total_area}}平方米</h4>
-</div>
-<div class="divider"></div>
-<div class="row">
-    <div class="col-md-7">
-        <div id="myCarousel" class="carousel slide">
-           <!-- 轮播（Carousel）指标 -->
-           <ol class="carousel-indicators">
-               {% for _ in images %}
-               {% if loop.index0 == 0 %}
-              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-               {% else %}
-              <li data-target="#myCarousel" data-slide-to="{{loop.index0}}"></li>
-               {% endif %}
-                {% endfor %}
-           </ol>
-           <!-- 轮播（Carousel）项目 -->
-           <div class="carousel-inner">
-            {% for image in images %}
-               {% if loop.index == 1 %}
-                <div class="item active">
-                    <img  src="{{ url_for('static', filename='%s/%s' % ('upload', images.first().url)) }}" alt="First slide">
-               </div>
-               {% else %}
-              <div class="item ">
-                    <img  src="{{ url_for('static', filename='%s/%s' % ('upload', image.url)) }}" alt="First slide">
-              </div>
-               {% endif %}
-           {% endfor %}
-           </div>
-           <!-- 轮播（Carousel）导航 -->
-           <a class="carousel-control left" href="#myCarousel"
-              data-slide="prev">&lsaquo;</a>
-           <a class="carousel-control right" href="#myCarousel"
-              data-slide="next">&rsaquo;</a>
-        </div>
-    </div>
-    <div class="col-md-5">
-        <p>建筑面积：{{post.total_area}}平方米</p>
-        <p>所在楼层：{{post.floor}}层(共{{post.total_floor}}层)</p>
-        <p>房屋类型：{{post.shi}}室/{{post.ting}}/厅{{post.wei}}/卫</p>
-        <p>所在区域：{{post.community}} [{{post.community.area.district}}-{{post.community.area}}]</p>
-    </div>
-</div>
-<hr>
-<div class="row">
-    <div class="col-md-8">
-        {{post.detail | safe}}
-    </div>
+{% block content %}
+<div class="main">
+	<div class="wp fluidgrid">
+	    <div class="col-9 mt-15 mr-0  main-l">
+	    	    <div class="houseInfor clearfix">
+	    	       <h1 class="info-title mt-0 mb-0">{{ post.title }}</h1>
+				   <!--pic start-->
+				   <div id="esfshxq_100">
+					    <div class="jdt f-l">
+						    <div class="jdt-pic" id="agantesfxq_B02_01">
+						      	<img src="{{ url_for('static', filename='%s/%s' % ('upload', images.first().url)) }}" id="BoxMainPic2014" alt="" width="400" height="300" />
+						    </div>
+						    <div class="sliderbox" id="agantesfxq_B02_02">
+							    <div id="btn-left" class="arrow-btn leftBtn"></div>
+							    <div class="slider" id="thumbnail">
+								       <ul >
+										   {% for image in images %}
+										   {% if loop.index == 1 %}
+										   <li class="current"> <img src="{{ url_for('static', filename='%s/%s' % ('upload', images.first().url)) }}" width="80" height="60" /></li>
+										   {% else %}
+										   <li class=""> <img src="{{ url_for('static', filename='%s/%s' % ('upload', image.url)) }}" width="80" height="60"  /></li>
+										   {% endif %}
+										   {% endfor %}
+									   </ul>
+							    </div>
+							    <div id="btn-right" class="arrow-btn rightBtn"> </div>
+						    </div>
+					    </div>
+				    </div>
+				   <!--pic end-->
+				   <!--jindian_info start-->
+				    <div class="inforTxt f-l">
+					    <dl class="house-d house-price mb-10">
+						    <dd>售<span class="pl-28"></span>价：<strong class="red20b">{{ post.total_price }}</strong>万</dd>
+						    <dd>单<span class="pl-28"></span>价：{{ post.price }}元/㎡</dd>
+						    <dd>户<span class="pl-28"></span>型：{{ post.shi }}室/{{ post.ting }}厅/{{ post.wei }}卫</dd>
+						    <dd>面<span class="pl-28"></span>积：{{ post.total_area }}㎡</dd>
+						</dl>
+						<dl class="house-d house-type mb-10">
+						    <dd>建筑年代：</dd>
+						    <dd>朝<span class="pl-28">向：{{ post.toward }}</dd>
+						    <dd>楼<span class="pl-28"></span>层：{{ post.floor }}/{{ post.total_floor }}层</dd>
+						    <dd>结构</dd>
+							<dd>装<span class="pl-28"></span>修: {{ post.decoration }}</dd>
+						    <dd>住宅类型：{{ post.type }}</dd>
+							<dd>最低首付：{{ post.down_payment }}万</dd>
+						    <dd>产权性质：个人产权</dd>
+						    <dd>看房时间：随时看房</dd>
+					    </dl>
+					    <div class="clear"></div>
+					    <div class="house-bit">
+					        <span class="colorGreen note">地铁房</span>
+			                <span class="colorRed note">学区房</span>
+			                <span class="colorBlue note">地铁周边</span>
+					    </div>
+					    <div class="phone_top">
+					        <span class="mobilecode l">18888888888</span>
+	                        <a class="share l ml-10" href="#"></a>
+					    </div>
+				    </div>
+	                <!--jindian_info start end-->
+	    	    </div>
+	    	    <div class="eshouse-details">
+						<div class="hd">
+							<ul>
+								<li><span>房源描述</span></li>
+								<li><span>房源图片</span></li>
+								<li><span>交通地图</span></li>
+								<li><span class="last">小区介绍</span></li>
+							</ul>
+						</div>
+						<div class="bd">
+							<div class="esf-details">
+	                             <p>{{ post.detail | safe }}</p>
+							</div>
+							<div class="esf-details">
+								{% for image in images %}
+									<p><img alt="" src="{{ url_for('static', filename='%s/%s' % ('upload', image.url)) }}" _src="{{ url_for('static', filename='%s/%s' % ('upload', image.url)) }}"></p>
+								{% endfor %}
+							</div>
+							<div class="esf-details">
+	                             <p><b><span style="color: blue; font-size: 13.5pt">公交路线：小区周边公交有</span></b><b><span style="color: blue; font-size: 13.5pt">185</span></b><b><span style="color: blue; font-size: 13.5pt">、</span></b><b><span style="color: blue; font-size: 13.5pt">58</span></b><b><span style="color: blue; font-size: 13.5pt">、</span></b><b><span style="color: blue; font-size: 13.5pt">767</span></b><b><span style="color: blue; font-size: 13.5pt">、</span></b><b><span style="color: blue; font-size: 13.5pt">110</span></b><b><span style="color: blue; font-size: 13.5pt">、</span></b><b><span style="color: blue; font-size: 13.5pt">85</span></b><b><span style="color: blue; font-size: 13.5pt">，祁宝线、虎南线、嘉广线等公交车可直达火车站、七浦路、彭浦新村和宝山区中心商圈。</span></b></p>
+	                             <p><b><span style="color: green; font-size: 13.5pt">离外环公路车程不到</span></b><b><span style="color: green; font-size: 13.5pt">10</span></b><b><span style="color: green; font-size: 13.5pt">分钟，小区就在</span></b><b><span style="color: green; font-size: 13.5pt">7</span></b><b><span style="color: green; font-size: 13.5pt">号线附近，</span></b><b><span style="color: green; font-size: 13.5pt">7</span></b><b><span style="color: green; font-size: 13.5pt">号线是条直线横跨上海，所以和它交叉的地铁线路非常的多，这样也方便了您的出行和工作。</span></b></p>
+	                             <p><img style="margin:20px 0;" alt="" src="images/test/map.png" _src="images/test/map.png"></p>
+							</div>
+							<div class="esf-details xqjs">
+	                             <dl class="mt10">
+						            <dd><span>二 手 房：</span><a target="_blank" href="/house-xm1210090680/">73</a>套</dd>
+						            <dd><span>租 房：</span><a target="_blank" href="http://zu.sh.fang.com/house-xm1210090680/">5</a>套</dd>
+						            <dd><span>物业类型：</span>住宅</dd>
+						            <dd><span>绿 化 率：</span>40.10%</dd>
+						            <dd><span>物 业 费：</span>1.00元/平米·月</dd>
+						            <dd><span>物业公司：</span>成事高邸物业有限公司</dd>
+						            <dd><span>开 发 商：</span>上海成事高第置业有限公司</dd>
+						            <div class="clear"></div>
+						        </dl>
+							</div>
+						</div>
+	    	    </div>
+	    </div>
+
+	</div>
 </div>
 
+<script type="text/javascript" src="{{ url_for('static', filename='js/JquerySlide.js') }}"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        PicSlide.initSlide("BoxMainPic2014", 400, 300, "srcN");
+        PicSlide.BindSlide("BoxMainPic2014", 400, 300, "thumbnail", "btn-right", "btn-left",4);
+    });
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.SuperSlide.2.1.1.js') }}"></script>
+<script type="text/javascript">
+    jQuery(".eshouse-details").slide({titCell:".hd li",mainCell:".bd",trigger:"click",delayTime:0,switchLoad:"_src" });
+</script>
 {% endblock %}

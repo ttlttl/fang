@@ -1,0 +1,99 @@
+<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        {% block head %}
+        <title>{% block title %}{{title}}{% endblock title %}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+        <meta name="keywords" content="上海买房，买房，二手房，新房">
+        <meta name="description" content="二手房，新房房源发布网站">
+        {% block scripts %}
+        <!--[if lt IE 9]>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/html5.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/respond.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/PIE_IE678.js') }}"></script>
+        <![endif]-->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.SuperSlide.2.1.1.js') }}"></script>
+        {% endblock scripts %}
+        {% block styles %}
+        <link rel="Bookmark" href="/favicon.ico" >
+        <link rel="Shortcut Icon" href="/favicon.ico" />
+        <link href="{{ url_for('static', filename='css/H-ui.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css" />
+        {% endblock styles%}
+        {% endblock head %}
+    </head>
+    <body>
+        {% block body %}
+        {% block navbar %}
+        <div class="navbg">
+              <nav class="mainnav cl wp">
+                  <ul class="cl">
+                        <li class="current"><a href="{{ url_for('main.index') }}">首页</a></li>
+                        <li><a href="{{ url_for('main.xf') }}">新房</a></li>
+                        <li><a href="{{ url_for('main.esf') }}">二手房</a></li>
+                  </ul>
+             </nav>
+        </div>
+        <div class="searchbg">
+            <div class="wp fluidgrid search">
+                 <div class="col-5 searchbox mt-10">
+                      <div class="searchBar">
+                          <form class="form-search" method="post" action="">
+                            <input id="searchKeyword" name="searchKeyword" value="请输入搜索关键词"
+                                   class="searchTxt" autocomplete="off"
+                                   onfocus="if(this.value=='请输入搜索关键词')this.value=''"
+                                   onblur="if(this.value=='')this.value='请输入搜索关键词'">
+                            <input id="searchBtn" name="searchBtn" type="submit" value="搜索"
+                                   class="searchBtn" onclick="b_onclick()">
+                          </form>
+                      </div>
+                 </div>
+                 <div class="col-7 mt-10 mb-10">
+                      <a>学区房</a>
+                      <a>二手房税表</a>
+                      <a>交房流程</a>
+                 </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+        {% endblock navbar %}
+        {% block content %}
+        {% endblock content %}
+        {% block widget %}
+        <div class="col-3 mt-15 mr-0 main-r f-r">
+    		 <p class="phone bline">
+    		 	 <span>24小时房产热线：</span>
+    		 	 <strong>18888888888</strong>
+    		 </p>
+			 <p class="phone bline">
+    		 	 <span>QQ：</span>
+    		 	 <strong>8888888</strong>
+    		 </p>
+    		 <p class="ewm">
+    		    <span class="t">微信联系</span>
+    		    <img src="{{ url_for('static', filename='images/ewm.png') }}" alt="" />
+    		 </p>
+    	</div>
+	    <div class="clear"></div>
+	    <div class="wp flinkbox">
+        	<h1 class=" clear f-title"> 友情链接</h1>
+		    <div class="flink row-1180-24 mr-0 ml-0">
+		         <a class="col-2" href="http://www.ttlx2.com">ttlx2</a>
+		    </div>
+		</div>
+        {% endblock widget %}
+        {% block footer %}
+        <div class="footer">
+            <div class="foot">
+                <a href="#">github</a>
+            </div>
+            <p>Copyright &copy 2016 All Rights Reserved 版权所有</p>
+        </div>
+        {% endblock footer %}
+        {% endblock body %}
+    </body>
+</html>

@@ -8,12 +8,32 @@
 <div class="post-tabs">
     <ul class="nav nav-tabs">
         <li{% if not show_used_house %} class="active"{% endif %}>
-            <a href="#"><h3>新房</h3></a>
+            <a href="{{url_for('main.xf')}}"><h3>新房</h3></a>
         </li>
         <li{% if show_show_used_house %} class="active"{% endif %}>
-            <a href="#"><h3>二手房</h3></a>
+            <a href="{{url_for('main.esf')}}"><h3>二手房</h3></a>
         </li>
     </ul>
+    <div class="row">
+        <div class="col-md-12">
+            <span>区域：</span>
+            <a href="#">黄浦区</a>
+            <a href="#">静安区</a>
+            <a href="#">长宁区</a>
+            <a href="#">闵行区</a>
+            <a href="#">宝山区</a>
+        </div>
+    </div>
+        <div class="row">
+        <div class="col-md-12">
+            <span>区域：</span>
+            <a href="#">黄浦区</a>
+            <a href="#">静安区</a>
+            <a href="#">长宁区</a>
+            <a href="#">闵行区</a>
+            <a href="#">宝山区</a>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-8">
             {% include '_posts.html' %}

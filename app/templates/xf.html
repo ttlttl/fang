@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}房子网{% endblock %}
+
+{% block page_content %}
+<ol class="breadcrumb">
+  <li><a href="{{ url_for('main.index') }}">主页</a></li>
+  <li class="active"><a href="{{ url_for('main.xf') }}">二手房</a></li>
+</ol>
+<dl>
+    <div class="col-md-1">
+    <dt>区&nbsp;域</dt>
+    </div>
+    <div class="col-md-11">
+    {% for district in districts %}
+    <div class="col-md-2">
+        <dd>
+            <a href="{{ url_for('main.xf') }}">{{district.name}}</a>
+        </dd>
+    </div>
+    {% endfor %}
+    </div>
+</dl>
+<div class="post-tabs">
+    <div class="row">
+        <div class="col-md-8">
+            {% include '_posts.html' %}
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+</div>
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.index') }}
+</div>
+{% endif %}
+{% endblock %}

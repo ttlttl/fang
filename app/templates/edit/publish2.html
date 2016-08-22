@@ -17,46 +17,18 @@
 </div>
 <form action="" method="post" class="form-horizontal" role="form">
         {{ form.hidden_tag() }}
-        <div class="form-group ">
-            {{ form.community_name.label(class="col-sm-2 control-label")}}
-            <div class="col-sm-2">
-                {{ form.community_name(class="form-control") }}
-            </div>
-        </div>
-        <div class="form-group ">
-            {{ form.total_area.label(class="col-sm-2 control-label")}}
-            <div class="col-sm-2">
-                {{ form.total_area(class="form-control") }}
-            </div>
-            <label class="control-label">平米</label>
-        </div>
-        <div class="form-group ">
-            {{ form.price.label(class="col-sm-2 control-label") }}
-            <div class="col-sm-2">
-                {{ form.price(class="form-control") }}
-            </div>
-            <label class="control-label">万元</label>
-        </div>
-        <div class="form-group ">
-            {{ form.total_price.label(class="col-sm-2 control-label") }}
-            <div class="col-sm-2">
-                {{ form.total_price(class="form-control") }}
-            </div>
-            <label class="control-label">万元</label>
-        </div>
-        <div class="form-group ">
-            {{ form.down_payment.label(class="col-sm-2 control-label") }}
-            <div class="col-sm-2">
-                {{ form.down_payment(class="form-control") }}
-            </div>
-            <label class="control-label">万元</label>
-        </div>
+        {{ wtf.form_field(form.new_or_used, form_type='horizontal', horizontal_columns=('md', 2, 2)) }}
+        {{ wtf.form_field(form.community_name, form_type='horizontal', horizontal_columns=('md', 2, 2)) }}
+        {{ wtf.form_field(form.total_area, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        {{ wtf.form_field(form.price, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        {{ wtf.form_field(form.total_price, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
+        {{ wtf.form_field(form.down_payment, form_type='horizontal', horizontal_columns=('md', 2, 2))}}
         <div class="form-group ">
             <label class="col-sm-2 control-label">房型</label>
             <div class="col-sm-2">
                 <div class="row">
                     <div class="col-sm-8">
-                        {{ form.shi(class="form-control") }}
+                        <input class="form-control" id="shi" name="shi" type="text" required value="">
                     </div>
                     <div class="col-sm-4">
                         {{ form.shi.label(class="control-label") }}
@@ -66,7 +38,7 @@
             <div class="col-sm-2">
                 <div class="row">
                     <div class="col-sm-8">
-                        {{ form.ting(class="form-control") }}
+                        <input class="form-control" id="ting" name="ting" type="text" required value="">
                     </div>
                     <div class="col-sm-4">
                         {{ form.ting.label(class="control-label") }}
@@ -76,7 +48,7 @@
             <div class="col-sm-2">
                 <div class="row">
                     <div class="col-sm-8">
-                        {{ form.wei(class="form-control") }}
+                        <input class="form-control" id="wei" name="wei" type="text" required value="">
                     </div>
                     <div class="col-sm-4">
                         {{ form.wei.label(class="control-label") }}

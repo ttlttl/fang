@@ -65,18 +65,22 @@ def load_user(user_id):
 class District(db.Model):
     __tablename__ = 'districts'
     id = db.Column(db.Integer, primary_key=True)
+    en_name = db.Column(db.String(64))
     name = db.Column(db.String(64))
     areas = db.relationship('Area', backref='district', lazy='dynamic')
 
     @staticmethod
     def insert_districts():
-        districts = ['黄埔区', '徐汇区', '长宁区', '静安区', '普陀区', '虹口区', '闵行区',\
-                     '杨浦区', '宝山区', '嘉定区', '浦东新区', '金山区', '松江区', \
-                     '青浦区', '奉贤区', '崇明县']
-        for d in districts:
-            district = District.query.filter_by(name=d).first()
+        districts = [('黄埔区', 'huangpuqu'), ('徐汇区', 'xuhuiqu'), ('长宁区', 'changningqu'), \
+                     ('静安区', 'jinganqu'), ('普陀区', 'xuhuiqu'), ('虹口区', 'hongkouqu'), \
+                     ('闵行区', 'minhangqu'),('杨浦区', 'yangpuqu'), ('宝山区', 'baoshanqu'),\
+                     ('嘉定区', 'jiadingqu'), ('浦东新区', 'pudongxinqu'), ('金山区', 'jinshanqu'),\
+                     ('松江区','songjiangqu'), ('青浦区', 'qingpuqu'), ('奉贤区', 'fengxianqu'),\
+                     ('崇明县', 'chongmingxian')]
+        for name, en_name in districts:
+            district = District.query.filter_by(name=name).first()
             if district is None:
-                district = District(name=d)
+                district = District(name=name, en_name=en_name)
                 db.session.add(district)
         db.session.commit()
 
@@ -87,6 +91,7 @@ class District(db.Model):
 class Area(db.Model):
     __tablename__ = 'areas'
     id = db.Column(db.Integer, primary_key=True)
+    en_name = db.Column(db.String(64))
     name = db.Column(db.String(64))
     district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
     communities = db.relationship('Community', backref='area', lazy='dynamic')
@@ -110,6 +115,7 @@ class Area(db.Model):
 class Community(db.Model):
     __tablename__ = 'communities'
     id = db.Column(db.Integer, primary_key=True)
+    en_name = db.Column(db.String(64))
     name = db.Column(db.String(64))
     area_id = db.Column(db.Integer, db.ForeignKey('areas.id'))
     houses = db.relationship('House', backref='community', lazy='dynamic')
@@ -154,6 +160,7 @@ class HouseToward():
 
 class House(db.Model):
     __tablename__ = 'houses'
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     is_new = db.Column(db.Boolean, default=True)
@@ -166,10 +173,10 @@ class House(db.Model):
     shi = db.Column(db.SmallInteger)
     ting = db.Column(db.SmallInteger)
     wei = db.Column(db.SmallInteger)
-    price = db.Column(db.SmallInteger)
-    total_area = db.Column(db.SmallInteger)
-    total_price = db.Column(db.SmallInteger)
-    down_payment = db.Column(db.SmallInteger)
+    price = db.Column(db.Integer)
+    total_area = db.Column(db.Integer)
+    total_price = db.Column(db.Integer)
+    down_payment = db.Column(db.Integer)
     detail = db.Column(db.Text)
     hot = db.Column(db.SmallInteger, default=1)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)

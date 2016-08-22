@@ -18,6 +18,8 @@
                     <th>标题</th>
                     <th>作者</th>
                     <th>发布日期</th>
+                    <th>编辑</th>
+                    <th>删除</th>
                 </tr>
             </thread>
             <tbody>
@@ -27,6 +29,8 @@
                     <td>{{post.title}}</td>
                     <td>{{post.author.name}}</td>
                     <td>{{post.timestamp}}</td>
+                    <td><a href="{{ url_for('edit.edit_post', id=post.id) }}">编辑</a></td>
+                    <td><a href="{{ url_for('edit.delete_house', id=post.id) }}">删除</a></td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -10,12 +10,31 @@
   <li class="active"><a href="{{ url_for('main.esf') }}">二手房</a></li>
 </ol>
 <dl>
+    <div class="col-md-1">
     <dt>区&nbsp;域</dt>
+    </div>
+    <div class="col-md-11">
     {% for district in districts %}
-    <dd>
-        <a href="#">{{district.name}}</a>
-    </dd>
+    <div class="col-md-2">
+        <dd>
+            <a href="{{ url_for('main.esf') }}">{{district.name}}</a>
+        </dd>
+    </div>
     {% endfor %}
+    </div>
 </dl>
-
+<div class="post-tabs">
+    <div class="row">
+        <div class="col-md-8">
+            {% include '_posts.html' %}
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+</div>
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.index') }}
+</div>
+{% endif %}
 {% endblock %}
