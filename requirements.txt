@@ -1,5 +1,6 @@
 alembic==0.8.6
 bleach==1.4.3
+blinker==1.3
 click==6.6
 dominate==2.2.0
 Flask==0.11.1
@@ -10,6 +11,7 @@ Flask-Pagination==0.0.1
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.1
 Flask-WTF==0.12
+flaskckeditor==1.6
 ForgeryPy==0.1
 html5lib==0.9999999
 itsdangerous==0.24
@@ -23,4 +25,5 @@ six==1.10.0
 SQLAlchemy==1.0.13
 visitor==0.1.3
 Werkzeug==0.11.10
+whoosh==2.6.0
 WTForms==2.1

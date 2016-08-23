@@ -12,6 +12,12 @@ from ..models import District, House, Community, Area, Image
 from ..decorators import admin_required
 
 
+@edit.route('/main')
+@login_required
+def main():
+    return render_template('edit/main.html')
+
+
 @edit.route('/location_info')
 @login_required
 def location_info():
@@ -48,6 +54,44 @@ def add_community():
             return redirect(url_for('.add_community'))
     districts = District.query.all()
     return render_template('edit/add_community.html', districts=districts)
+
+
+@edit.route('/communities/<int:id>', methods=['GET', 'POST'])
+@login_required
+def communities(id):
+    form = AddCommunityForm()
+    area = Area.query.get_or_404(id)
+    if form.validate_on_submit():
+        new_community = Community(name=form.community_name.data, en_name=form.en_name.data, area=area)
+        db.session.add(new_community)
+        flash('添加成功')
+        return redirect(url_for('edit.communities', id=id))
+    communities = area.communities
+    return render_template('edit/communities.html', form=form, area=area, communities=communities)
+
+
+@edit.route('/community_management/<int:id>', methods=['GET', 'POST'])
+@login_required
+def community_management(id):
+    form = AddCommunityForm()
+    community = Community.query.get_or_404(id)
+    if form.validate_on_submit():
+        community.name = form.community_name.data
+        community.en_name = form.en_name.data
+        community.developer = form.developer.data
+        community.property_management = form.property_management.data
+        community.property_costs = form.property_costs.data
+        community.greening_rate = form.greening_rate.data
+        db.session.add(community)
+        flash('更新成功')
+        return redirect(url_for('.community_management', id=id))
+    form.community_name.data = community.name
+    form.en_name.data = community.en_name
+    form.developer.data = community.developer
+    form.property_management.data = community.property_management
+    form.property_costs.data = community.property_costs
+    form.greening_rate.data = community.greening_rate
+    return render_template('edit/community_management.html', form=form)
 
 
 @edit.route('/publish2', methods=['GET', 'POST'])
@@ -116,7 +160,6 @@ def edit_post(id):
         house.detail=form.detail.data
 
         db.session.add(house)
-        print('dfsdfsdfsdfsdfaf')
         flash('更新成功')
         return redirect(url_for('.edit_post', id=id))
 
@@ -241,20 +284,6 @@ def area_management(id):
     form.area_name.data = area.name
     form.en_name.data = area.en_name
     return render_template('edit/area_management.html', form=form)
-
-
-@edit.route('/communities/<int:id>', methods=['GET', 'POST'])
-@login_required
-def communities(id):
-    form = AddCommunityForm()
-    area = Area.query.get_or_404(id)
-    if form.validate_on_submit():
-        new_community = Community(name=form.community_name.data, en_name=form.en_name.data, area=area)
-        db.session.add(new_community)
-        flash('添加成功')
-        return redirect(url_for('edit.communities', id=id))
-    communities = area.communities
-    return render_template('edit/communities.html', form=form, area=area, communities=communities)
 
 
 @edit.route('/houses/<int:id>')

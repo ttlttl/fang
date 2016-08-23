@@ -1,52 +1,15 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% import "_macros.html" as macros %}
 
 {% block title %}房子网{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>小区管理</h1>
+    <h1>修改小区信息</h1>
 </div>
 <div class="row">
     <div class="col-md-2">
-        <a class="btn btn-success" type="button" href="{{ url_for('auth.add_user') }}">添加小区</a>
-    </div>
-</div>
-<div class="divider"></div>
-<div class="row">
-    <div class="col-md-8">
-        <table class="table table-hover">
-            <thread>
-                <tr>
-                    <th>小区名称</th>
-                    <th>街道</th>
-                    <th>区县</th>
-                </tr>
-            </thread>
-            <tbody>
-            {% for user in users %}
-                <tr>
-                    <td>{{user.id}}</td>
-                    <td>{{user.username}}</td>
-                    <td>{{user.email}}</td>
-                    <td><a href="{{ url_for('auth.change_password', id=user.id) }}">修改</a></td>
-                    <td><a href="{{ url_for('auth.status_user', id=user.id) }}">
-                        {% if user.actived %}
-                        停用
-                        {% else %}
-                        启用
-                        {% endif %}
-                    </a></td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% if pagination %}
-        <div class="pagination">
-            {{ macros.pagination_widget(pagination, 'auth.user_management') }}
-        </div>
-    {% endif %}
+        {{ wtf.quick_form(form) }}
     </div>
 </div>
 {% endblock %}

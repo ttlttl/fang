@@ -1,6 +1,7 @@
 # -*- coding=UTF-8 -*-
 from flask_wtf import Form
-from wtforms import StringField, BooleanField, SubmitField, IntegerField, SelectField, TextAreaField
+from wtforms import StringField, BooleanField, SubmitField, IntegerField,\
+    SelectField, TextAreaField, DecimalField
 from wtforms.validators import DataRequired, Length
 
 
@@ -36,6 +37,10 @@ class AddAreaForm(Form):
 class AddCommunityForm(Form):
     community_name = StringField('小区名称', validators=[DataRequired(), Length(1, 200)])
     en_name = StringField('拼音', validators=[DataRequired(), Length(1, 64)])
+    developer = StringField('开发商', validators=[Length(1, 64)])
+    property_management = StringField('物业公司', validators=[Length(1, 64)])
+    property_costs = DecimalField('物业费(元/平方米)')
+    greening_rate = DecimalField('绿化率')
     submit = SubmitField('添加')
 
 

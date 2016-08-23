@@ -42,11 +42,17 @@
 						</dl>
 						<dl class="house-d house-type mb-10">
 						    <dd>建筑年代：</dd>
-						    <dd>朝<span class="pl-28">向：{{ post.toward }}</dd>
+							{% set towards = ['未知', '东','西','南','北',
+								'东南','东北','西南','西北'] %}
+							{% set types = ['未知', '公寓', '别墅', '住宅',
+							    '老公房', '洋房', '平房', '其他'] %}
+							{% set decorations = ['未知', '毛坯', '简单',
+							    '中等', '精装', '豪华', '其他'] %}
+						    <dd>朝<span class="pl-28">向：{{ towards[post.toward] }}</dd>
 						    <dd>楼<span class="pl-28"></span>层：{{ post.floor }}/{{ post.total_floor }}层</dd>
 						    <dd>结构</dd>
-							<dd>装<span class="pl-28"></span>修: {{ post.decoration }}</dd>
-						    <dd>住宅类型：{{ post.type }}</dd>
+							<dd>装<span class="pl-28"></span>修: {{ decorations[post.decoration] }}</dd>
+						    <dd>住宅类型：{{ types[post.type] }}</dd>
 							<dd>最低首付：{{ post.down_payment }}万</dd>
 						    <dd>产权性质：个人产权</dd>
 						    <dd>看房时间：随时看房</dd>
@@ -69,7 +75,6 @@
 							<ul>
 								<li><span>房源描述</span></li>
 								<li><span>房源图片</span></li>
-								<li><span>交通地图</span></li>
 								<li><span class="last">小区介绍</span></li>
 							</ul>
 						</div>
@@ -82,20 +87,12 @@
 									<p><img alt="" src="{{ url_for('static', filename='%s/%s' % ('upload', image.url)) }}" _src="{{ url_for('static', filename='%s/%s' % ('upload', image.url)) }}"></p>
 								{% endfor %}
 							</div>
-							<div class="esf-details">
-	                             <p><b><span style="color: blue; font-size: 13.5pt">公交路线：小区周边公交有</span></b><b><span style="color: blue; font-size: 13.5pt">185</span></b><b><span style="color: blue; font-size: 13.5pt">、</span></b><b><span style="color: blue; font-size: 13.5pt">58</span></b><b><span style="color: blue; font-size: 13.5pt">、</span></b><b><span style="color: blue; font-size: 13.5pt">767</span></b><b><span style="color: blue; font-size: 13.5pt">、</span></b><b><span style="color: blue; font-size: 13.5pt">110</span></b><b><span style="color: blue; font-size: 13.5pt">、</span></b><b><span style="color: blue; font-size: 13.5pt">85</span></b><b><span style="color: blue; font-size: 13.5pt">，祁宝线、虎南线、嘉广线等公交车可直达火车站、七浦路、彭浦新村和宝山区中心商圈。</span></b></p>
-	                             <p><b><span style="color: green; font-size: 13.5pt">离外环公路车程不到</span></b><b><span style="color: green; font-size: 13.5pt">10</span></b><b><span style="color: green; font-size: 13.5pt">分钟，小区就在</span></b><b><span style="color: green; font-size: 13.5pt">7</span></b><b><span style="color: green; font-size: 13.5pt">号线附近，</span></b><b><span style="color: green; font-size: 13.5pt">7</span></b><b><span style="color: green; font-size: 13.5pt">号线是条直线横跨上海，所以和它交叉的地铁线路非常的多，这样也方便了您的出行和工作。</span></b></p>
-	                             <p><img style="margin:20px 0;" alt="" src="images/test/map.png" _src="images/test/map.png"></p>
-							</div>
 							<div class="esf-details xqjs">
 	                             <dl class="mt10">
-						            <dd><span>二 手 房：</span><a target="_blank" href="/house-xm1210090680/">73</a>套</dd>
-						            <dd><span>租 房：</span><a target="_blank" href="http://zu.sh.fang.com/house-xm1210090680/">5</a>套</dd>
-						            <dd><span>物业类型：</span>住宅</dd>
-						            <dd><span>绿 化 率：</span>40.10%</dd>
-						            <dd><span>物 业 费：</span>1.00元/平米·月</dd>
-						            <dd><span>物业公司：</span>成事高邸物业有限公司</dd>
-						            <dd><span>开 发 商：</span>上海成事高第置业有限公司</dd>
+						            <dd><span>绿 化 率：</span>{{ post.community.greening_rate }}%</dd>
+						            <dd><span>物 业 费：</span>{{ post.community.property_costs }}元/平米·月</dd>
+						            <dd><span>物业公司：</span>{{ post.community.property_management }}</dd>
+						            <dd><span>开 发 商：</span>{{ post.community.developer }}</dd>
 						            <div class="clear"></div>
 						        </dl>
 							</div>

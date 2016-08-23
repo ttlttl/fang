@@ -1,40 +1,214 @@
-{% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% extends "_base.html" %}
 {% import "_macros.html" as macros %}
 
 {% block title %}房子网{% endblock %}
 
-{% block page_content %}
-<ol class="breadcrumb">
-  <li><a href="{{ url_for('main.index') }}">主页</a></li>
-  <li class="active"><a href="{{ url_for('main.esf') }}">二手房</a></li>
-</ol>
-<dl>
-    <div class="col-md-1">
-    <dt>区&nbsp;域</dt>
+{% block content %}
+<div class="main">
+    <div class="wp fluidgrid">
+	     <div class="row">
+	        <div class="clear"></div>
+	        <div class="col-12 submenu mt-15">
+	            <div class="hd">
+					<ul>
+	                    <li class="on"><span>按地区查询</span></li>
+	               </ul>
+				</div>
+				<div class="clear"></div>
+				<div class="search-con">
+					<div id="list_38" class="quxian mt-20 ml-25" name="div_districtandcomarea">
+	       				<span class="type">区域：</span>
+						<div class="qxName" style="z-index: 2">
+						            <a href="{{ url_for('main.esf_with_location_and_args',
+						            	location="all",
+										args='%s-%s-%s' % (a, b, c)) }}"
+										{% if selected_district == "all" %} class="org bold" {% endif %}
+										>不限</a>
+									{% for district in districts %}
+										{% if district.en_name == selected_district %}
+											<a href="{{ url_for('main.esf_with_location_and_args',
+												location=district.en_name, args='%s-%s-%s' % (a, b, c)) }}"
+											   class="org selected">{{ district.name }}</a>
+										{% else %}
+											<a href="{{ url_for('main.esf_with_location_and_args',
+												location=district.en_name, args='%s-%s-%s' % (a, b, c)) }}"
+											   name="{{district.id}}">{{ district.name }}</a>
+										{% endif %}
+									{% endfor %}
+						</div>
+	        		</div>
+					{% if selected_district != "all" %}
+					<div id="div_shangQuan" class="shangQuan ml-25">
+					    <p class="top"></p>
+					    <p id="shangQuancontain" class="contain">
+							{% for area in areas %}
+								<a href="{{ url_for('main.esf_with_location_and_args',
+									location='%s-%s' % (selected_district, area.en_name),
+									args='%s-%s-%s' % (a, b, c)) }}"
+								   {% if area.en_name == selected_area %}
+								   		class="org selected"
+								   {% endif %}
+								>
+									{{ area.name }}
+								</a>
+							{% endfor %}
+					    </p>
+					    <p class="bottom"></p>
+					</div>
+					{% endif %}
+	                <div class="clear"></div>
+					<ul class="info ml-25">
+				        <li id="list_39" name="div_price">
+				            <p class="l">总价：
+								<a href="{{ url_for('main.esf_with_location_and_args',
+				            		location=selected_location, args= '%s-%s-%s' % ('a0', b, c)) }}"
+								   style="cursor :pointer;"
+								   rel="nofollow"
+								   id="a0"
+									{% if a == "a0" %} class="org selected" {% endif %}
+								>不限</a>
+				                {% set prices=["100万以下", "100-150万", "150-200万", "200-300万",
+												"300-500万", "500-1000万", "1000万以上"] %}
+								{% for price in prices %}
+								<a href="{{ url_for('main.esf_with_location_and_args',
+										location=selected_location, args='a%d-%s-%s'% (loop.index, b, c)) }}"
+									   id="a{{loop.index}}"
+									{% if "a%s"%loop.index == a %} class="org selected" {% endif %}>
+									{{price}}
+								</a>
+								{% endfor %}
+				            </p>
+				        </li>
+				        <li id="list_40" name="div_room">户型：
+							<a href="{{ url_for('main.esf_with_location_and_args',
+								location=selected_location, args='%s-%s-%s' % (a, 'b0', c)) }}"
+							   style="cursor :pointer;"
+							   rel="nofollow"
+							   id="b0"
+								{% if "b0" == b %} class="org selected" {% endif %}
+							>不限</a>
+							{% set rooms=["一居", "二居", "三居", "四居", "五居", "五居以上"] %}
+							{% for room in rooms %}
+								 <a href="{{ url_for('main.esf_with_location_and_args',
+								 		location=selected_location, args='%s-b%d-%s' % (a, loop.index, c)) }}"
+									rel="nofollow"
+									id="b{{loop.index}}"
+									{% if "b%s" % loop.index == b %} class="org selected" {% endif %}
+								 >{{room}}</a>
+							{% endfor %}
+				        </li>
+				        <li id="list_41" name="div_area">
+				            <p class="l">面积：
+								<a href="{{ url_for('main.esf_with_location_and_args',
+										location=selected_location, args='%s-%s-%s' % (a, b, 'c0')) }}"
+								   style="cursor :pointer;"
+								   rel="nofollow"
+								   id="c0"
+								   {% if c=="c0" %} class="org selected" {% endif %}
+								>不限</a>
+								{% set areas=["50平米以下", "50-70平米", "70-90平米", "90-110平米", "110-130平米",
+												"130-150平米", "150-200平米", "200-300平米", "300平米以上"] %}
+								{% for area in areas %}
+									<a href="{{ url_for('main.esf_with_location_and_args',
+										location=selected_location,
+										args='%s-%s-c%d' % (a, b, loop.index)) }}"
+									   rel="nofollow"
+									   id='c{{loop.index}}'
+									   {% if "c%s" % loop.index == c %} class="org selected" {% endif %}
+									>{{ area }}</a>
+								{% endfor %}
+				            </p>
+				        </li>
+	    			</ul>
+				</div>
+			</div>
+		 </div>
     </div>
-    <div class="col-md-11">
-    {% for district in districts %}
-    <div class="col-md-2">
-        <dd>
-            <a href="{{ url_for('main.esf') }}">{{district.name}}</a>
-        </dd>
-    </div>
-    {% endfor %}
-    </div>
-</dl>
-<div class="post-tabs">
-    <div class="row">
-        <div class="col-md-8">
-            {% include '_posts.html' %}
+    <div class="clear"></div>
+    <div class="wp fluidgrid">
+        <div class="content-top">
+             <h3 class="f-l">二手房</h3>
+             <div class="top-pagebox f-l">
+				 {% if pagination %}
+				 <span>1/{{ pagination.pages }}</span>
+				 <a href="{% if pagination.has_next %}
+             				{{ url_for('main.esf_with_location_and_args',
+							location=selected_location,
+							args='%s-%s-%s' % (a, b, c),
+							page=pagination.next_num) }}
+							{% else %}#{% endif %}"
+					class="toppage-next f-r">
+				 </a>
+				 <a href="{% if pagination.has_prev %}
+             				{{ url_for('main.esf_with_location_and_args',
+							location=selected_location,
+							args='%s-%s-%s' % (a, b, c),
+							page=pagination.prev_num) }}
+							{% else %}#{% endif %}"
+					class="toppage-prev f-r">
+				 </a>
+				 {% endif %}
+             </div>
         </div>
-        <div class="col-md-4">
+    	<div class="col-9 mt-0 mr-0  main-l">
+    	     <div class="houseList">
+				 	{% for post in posts %}
+                    <dl id="list_1" class="list rel">
+		                <dt class="img rel l">
+		                        <a href="{{ url_for('main.detail', id=post.id) }}" target="_blank">
+		                            <img width="200" height="150" src="{{url_for('static',
+		                            		filename='%s/%s' % ('upload', post.images.first().url))}}"></a>
+						</dt>
+						<dd class="info rel r">
+						    <p class="title">
+						        <a href="{{ url_for('main.detail', id=post.id) }}" target="_blank"
+								   title="{{ post.title }}">{{ post.title }}</a>
+						    </p>
+		                    <p class="gray6 mt-12">
+		                        <a target="_blank" href="#" title="{{ post.community.name }}">
+									<span>{{ post.community.name }}</span>
+								</a>
+		                        <span class="iconAdress ml-10" title=""></span>
+		                    </p>
+							<p class="gray6 mt-10">{{ post.floor }}/{{ post.total_floor }}层
+								<span class="hsline">|</span>南北向<span class="hsline">|</span>建筑年代：2000</p>
+							<p class="gray6 mt-10">
+							 	<a rel="nofollow" href="#" style="color:#333333;display:none;"
+								   title="查看更多房源" target="_blank">太平洋房屋</a>
+							 	<a rel="nofollow" style="color:#333333" href="#" title="查看他的房源"
+								   target="_blank">{{ post.author.name }}</a>
+							</p>
+		                    <div class="mt-8 clearfix">
+		                            <div class="pt-5 l">
+		                            	<span class="colorGreen note">地铁房</span>
+		                            	<span class="colorRed note">学区房</span>
+		                            	<span class="colorBlue note">精装修</span>
+		                            </div>
+		                    </div>
+		                    <div class="ts YaHei">{{ post.shi }}室{{ post.ting }}厅</div>
+							<div class="area text-r YaHei">{{ post.total_area }}平米</div>
+							<div class="moreInfo">
+								  <p class="mt-5 text-r"><span class="price">{{ post.total_price }}</span>
+								  <span class="YaHei ml-5">万</span></p>
+								  <p class="danjia text-r mt-5 gray6">{{ post.price }}元
+									  <span class="Arial">/</span>平米</p>
+							 </div>
+						</dd>
+						<div class="clear"></div>
+			        </dl>
+					{% endfor %}
+
+                    <div class="clearfix mt15">
+						<div class="fanye gray6 r">
+							{% if pagination %}
+								<div class="pagination">
+									{{ macros.pagination_widget(pagination, 'main.esf_with_location_and_args',
+										location=selected_location, args='%s-%s-%s' % (a, b, c)) }}
+								</div>
+							{% endif %}
+			            </div>
+					</div>
+    	     </div>
         </div>
-    </div>
 </div>
-{% if pagination %}
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, '.index') }}
-</div>
-{% endif %}
 {% endblock %}

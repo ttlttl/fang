@@ -32,9 +32,9 @@
         <div class="navbg">
               <nav class="mainnav cl wp">
                   <ul class="cl">
-                        <li class="current"><a href="{{ url_for('main.index') }}">首页</a></li>
-                        <li><a href="{{ url_for('main.xf') }}">新房</a></li>
-                        <li><a href="{{ url_for('main.esf') }}">二手房</a></li>
+                        <li {% if current_page=="index" %}class="current"{% endif %}><a href="{{ url_for('main.index') }}">首页</a></li>
+                        <li {% if current_page=="xf" %}class="current"{% endif %}><a href="{{ url_for('main.xf') }}">新房</a></li>
+                        <li {% if current_page =="esf" %}class="current"{% endif %}><a href="{{ url_for('main.esf') }}">二手房</a></li>
                   </ul>
              </nav>
         </div>
@@ -51,11 +51,6 @@
                                    class="searchBtn" onclick="b_onclick()">
                           </form>
                       </div>
-                 </div>
-                 <div class="col-7 mt-10 mb-10">
-                      <a>学区房</a>
-                      <a>二手房税表</a>
-                      <a>交房流程</a>
                  </div>
             </div>
         </div>

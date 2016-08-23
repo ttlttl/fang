@@ -27,6 +27,7 @@
                     <th>id</th>
                     <th>名称</th>
                     <th>管理</th>
+                    <th>编辑</th>
                 </tr>
             </thread>
             <tbody>
@@ -35,6 +36,7 @@
                     <td>{{community.id}}</td>
                     <td>{{community.name}}</td>
                     <td><a href="{{ url_for('edit.houses', id=community.id) }}">管理</a></td>
+                    <td><a href="{{ url_for('edit.community_management', id=community.id) }}">编辑</a></td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -3,12 +3,17 @@ from . import main
 from ..models import House, District, Area, Community
 import re
 
+# total price range
+a_range = ((0, 10000), (0, 101), (101, 150), (151, 201), (201, 301), \
+           (301, 501), (501, 1001), (1001, 10000))
+# total area range
+c_range = ((0, 10000), (0, 51), (51, 71), (71, 91), (91, 111), (111, 131), \
+           (131, 151), (151, 201), (201, 301), (301, 10000))
+
+
 @main.route('/', methods=['GET'])
 def index():
-    page = request.args.get('page', 1, type=int)
-    pagination = House.query.order_by(House.timestamp.desc()).paginate(page, per_page=10, error_out=False)
-    posts = pagination.items
-    return render_template('index.html', posts=posts, pagination=pagination, show_used_house=True)
+    return redirect(url_for('main.esf'))
 
 
 @main.route('/detail/<int:id>')
@@ -30,13 +35,6 @@ def xf_redirect_with_location(location):
 
 @main.route('/xf/<location>/<args>')
 def xf_with_location_and_args(location, args):
-    # total price range
-    a_range = ((0, 10000),(0, 101), (101, 150), (151, 201), (201, 301), \
-               (301, 501), (501, 1001), (1001, 10000))
-    # total area range
-    c_range = ((0, 10000), (0, 51), (51, 71), (71, 91), (91,111), (111,131),\
-               (131, 151), (151, 201), (201, 301), (301, 10000))
-
     # args, eg: a1-b3-c2, price in range(0, 101), 3 shi, area in range(51-71)
     if not re.match(r'a[0-9]-b[0-9]-c[0-9]', args):
         arg_a, arg_b, arg_c = "a0", "b0", "c0"
@@ -119,10 +117,11 @@ def xf_with_location_and_args(location, args):
 
     posts = pagination.items
     districts = District.query.all()
-    return render_template('esf2.html', districts=districts, areas=areas, posts=posts, \
+    return render_template('xf.html', districts=districts, areas=areas, posts=posts, \
                            pagination=pagination, a=arg_a, b=arg_b, c=arg_c, \
                            selected_location = selected_location, \
-                           selected_district=selected_district, selected_area=selected_area)
+                           selected_district=selected_district, selected_area=selected_area,\
+                           current_page='xf')
 
 
 @main.route('/esf/')
@@ -137,13 +136,6 @@ def redirect_with_location(location):
 
 @main.route('/esf/<location>/<args>')
 def esf_with_location_and_args(location, args):
-    # total price range
-    a_range = ((0, 10000),(0, 101), (101, 150), (151, 201), (201, 301), \
-               (301, 501), (501, 1001), (1001, 10000))
-    # total area range
-    c_range = ((0, 10000), (0, 51), (51, 71), (71, 91), (91,111), (111,131),\
-               (131, 151), (151, 201), (201, 301), (301, 10000))
-
     # args, eg: a1-b3-c2, price in range(0, 101), 3 shi, area in range(51-71)
     if not re.match(r'a[0-9]-b[0-9]-c[0-9]', args):
         arg_a, arg_b, arg_c = "a0", "b0", "c0"
@@ -226,9 +218,10 @@ def esf_with_location_and_args(location, args):
 
     posts = pagination.items
     districts = District.query.all()
-    return render_template('esf2.html', districts=districts, areas=areas, posts=posts, \
+    return render_template('esf.html', districts=districts, areas=areas, posts=posts, \
                            pagination=pagination, a=arg_a, b=arg_b, c=arg_c, \
                            selected_location = selected_location, \
-                           selected_district=selected_district, selected_area=selected_area)
+                           selected_district=selected_district, selected_area=selected_area,
+                           current_page='esf')
 
 

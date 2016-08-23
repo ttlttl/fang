@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}房子网{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-md-5">
+        <ul class="list-group">
+            <li class="list-group-item"><a href="{{ url_for('edit.districts') }}">小区管理</a></li>
+            <li class="list-group-item"><a href="{{ url_for('edit.publish2') }}">发布房源</a></li>
+            <li class="list-group-item"><a href="{{ url_for('edit.my_posts') }}">我发布的</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -117,45 +117,15 @@ class Community(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     en_name = db.Column(db.String(64))
     name = db.Column(db.String(64))
+    developer = db.Column(db.String(64))
+    property_management = db.Column(db.String(64))
+    property_costs = db.Column(db.Float)
+    greening_rate = db.Column(db.Float)
     area_id = db.Column(db.Integer, db.ForeignKey('areas.id'))
     houses = db.relationship('House', backref='community', lazy='dynamic')
 
     def __repr__(self):
         return self.name
-
-
-class HouseType():
-    gongyu = 1
-    bieshu = 2
-    zhuzhai = 3
-    laogongfang = 4
-    yangfang = 5
-    pingfang = 6
-    other = 99
-
-
-class HouseDecoration():
-    maopi = 1
-    jiandan = 2
-    zhongdeng = 3
-    jingzhuang = 4
-    haohua = 5
-    other = 99
-
-
-class HouseToward():
-    """
-    House toward, E = East, W = West ...
-    """
-    E = 1
-    W = 2
-    S = 3
-    N = 4
-    ES = 5
-    EN = 6
-    WS = 7
-    EN = 8
-
 
 
 class House(db.Model):
@@ -178,7 +148,8 @@ class House(db.Model):
     total_price = db.Column(db.Integer)
     down_payment = db.Column(db.Integer)
     detail = db.Column(db.Text)
-    hot = db.Column(db.SmallInteger, default=1)
+    hot = db.Column(db.Integer, default=1)
+    building_age = db.Column(db.SmallInteger)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     community_id = db.Column(db.Integer, db.ForeignKey('communities.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
