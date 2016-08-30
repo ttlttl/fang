@@ -30,7 +30,7 @@
                     <td>{{post.author.name}}</td>
                     <td>{{post.timestamp}}</td>
                     <td><a href="{{ url_for('edit.edit_post', id=post.id) }}">编辑</a></td>
-                    <td><a href="{{ url_for('edit.delete_house', id=post.id) }}">删除</a></td>
+                    <td><a href="{{ url_for('edit.delete_post', id=post.id) }}">删除</a></td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -78,5 +78,5 @@ def change_password(id):
         db.session.add(user)
         flash("密码修改成功！")
         return redirect(url_for('auth.user_management'))
-    return render_template('auth/change_password.html', form=form)
+    return render_template('auth/password_change.html', form=form)
 

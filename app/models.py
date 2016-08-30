@@ -72,7 +72,7 @@ class District(db.Model):
     @staticmethod
     def insert_districts():
         districts = [('黄埔区', 'huangpuqu'), ('徐汇区', 'xuhuiqu'), ('长宁区', 'changningqu'), \
-                     ('静安区', 'jinganqu'), ('普陀区', 'xuhuiqu'), ('虹口区', 'hongkouqu'), \
+                     ('静安区', 'jinganqu'), ('普陀区', 'putuoqu'), ('虹口区', 'hongkouqu'), \
                      ('闵行区', 'minhangqu'),('杨浦区', 'yangpuqu'), ('宝山区', 'baoshanqu'),\
                      ('嘉定区', 'jiadingqu'), ('浦东新区', 'pudongxinqu'), ('金山区', 'jinshanqu'),\
                      ('松江区','songjiangqu'), ('青浦区', 'qingpuqu'), ('奉贤区', 'fengxianqu'),\
@@ -95,18 +95,6 @@ class Area(db.Model):
     name = db.Column(db.String(64))
     district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
     communities = db.relationship('Community', backref='area', lazy='dynamic')
-
-    @staticmethod
-    def insert_areas():
-        qingpu = ['白鹤', '华新镇', '青浦新城', '徐泾', '朱家角', '赵巷', '重固', '其他']
-        hongkou = ['北外滩', '临平路', '四川北路', '其他']
-        districts = {'青浦区': qingpu, '虹口区': hongkou}
-        for district, areas in districts.items():
-            d = District.query.filter_by(name=district).first()
-            for area in areas:
-                a = Area(name=area, district=d)
-                db.session.add(a)
-        db.session.commit()
 
     def __repr__(self):
         return self.name

@@ -136,47 +136,47 @@ def publish2():
 @login_required
 def edit_post(id):
     form = AddUsedHouseForm()
-    house = House.query.get_or_404(id)
-    form.new_or_used = house.is_new
-    form.community_name.data = house.community.name
-    form.type.data = house.type
-    form.decoration.data = house.decoration
-    form.toward.data = house.toward
+    post = House.query.get_or_404(id)
+    form.new_or_used = post.is_new
+    form.community_name.data = post.community.name
+    form.type.data = post.type
+    form.decoration.data = post.decoration
+    form.toward.data = post.toward
 
-    if form.validate_on_submit():
-        house.title = form.title.data
-        house.type = form.type.data
-        house.decoration=form.decoration.data
-        house.toward=form.toward.data
-        house.floor=form.floor.data
-        house.total_floor=form.total_floor.data
-        house.shi=form.shi.data
-        house.ting=form.ting.data
-        house.wei=form.wei.data
-        house.price=form.price.data
-        house.total_area=form.total_area.data
-        house.total_price=form.total_price.data
-        house.down_payment=form.down_payment.data
-        house.detail=form.detail.data
+    if form.is_submitted():
+        post.title = form.title.data
+        post.type = form.type.data
+        post.decoration=form.decoration.data
+        post.toward=form.toward.data
+        post.floor=form.floor.data
+        post.total_floor=form.total_floor.data
+        post.shi=form.shi.data
+        post.ting=form.ting.data
+        post.wei=form.wei.data
+        post.price=form.price.data
+        post.total_area=form.total_area.data
+        post.total_price=form.total_price.data
+        post.down_payment=form.down_payment.data
+        post.detail=form.detail.data
 
-        db.session.add(house)
+        db.session.add(post)
         flash('更新成功')
         return redirect(url_for('.edit_post', id=id))
 
-    form.title.data = house.title
-    form.type.data = house.type
-    form.decoration.data = house.decoration
-    form.toward.data = house.toward
-    form.floor.data = house.floor
-    form.shi.data = house.shi
-    form.ting.data = house.ting
-    form.wei.data = house.wei
-    form.price.data = house.price
-    form.total_area.data = house.total_area
-    form.total_price.data = house.total_price
-    form.total_floor.data = house.total_floor
-    form.down_payment.data = house.down_payment
-    form.detail.data = house.detail
+    form.title.data = post.title
+    form.type.data = post.type
+    form.decoration.data = post.decoration
+    form.toward.data = post.toward
+    form.floor.data = post.floor
+    form.shi.data = post.shi
+    form.ting.data = post.ting
+    form.wei.data = post.wei
+    form.price.data = post.price
+    form.total_area.data = post.total_area
+    form.total_price.data = post.total_price
+    form.total_floor.data = post.total_floor
+    form.down_payment.data = post.down_payment
+    form.detail.data = post.detail
     return render_template('edit/edit_post.html', form=form)
 
 
@@ -233,7 +233,6 @@ def upload():
         session['images'].append(rnd_name)
         # mutable structures are not picked up automatically
         session.modified = True
-        print(session['images'])
         return jsonify({'result':'Success'})
     return jsonify({'result':'Fail'})
 
@@ -242,9 +241,15 @@ def upload():
 @login_required
 def my_posts():
     page = request.args.get('page', 1, type=int)
-    pagination = House.query.order_by(House.timestamp.desc()).paginate(
-        page, per_page=10, error_out=False
-    )
+    if current_user.is_administrator:
+        pagination = House.query.order_by(House.timestamp.desc()).paginate(
+            page, per_page=10, error_out=False
+        )
+    else:
+        pagination = House.query.filter_by(House.author_id==current_user.id)\
+            .order_by(House.timestamp.desc()).paginate(
+                    page, per_page=10, error_out=False
+                )
     posts = pagination.items
     return render_template('edit/my_posts.html', posts=posts, pagination=pagination)
 
@@ -286,27 +291,27 @@ def area_management(id):
     return render_template('edit/area_management.html', form=form)
 
 
-@edit.route('/houses/<int:id>')
+@edit.route('/posts/<int:id>')
 @login_required
-def houses(id):
+def posts(id):
     community = Community.query.get_or_404(id)
-    houses = community.houses
-    return render_template('edit/houses.html', community=community, houses=houses)
+    posts = community.posts
+    return render_template('edit/posts.html', community=community, posts=posts)
 
 
-@edit.route('/all_houses')
+@edit.route('/all_posts')
 @login_required
-def all_houses():
-    houses = House.query.all()
-    return render_template('edit/all_houses.html', houses=houses)
+def all_posts():
+    posts = House.query.all()
+    return render_template('edit/all_posts.html', posts=posts)
 
 
-@edit.route('/delete_house/<int:id>')
+@edit.route('/delete_post/<int:id>')
 @login_required
 @admin_required
-def delete_house(id):
+def delete_post(id):
     referer = request.headers.get('Referer')
-    house = House.query.get(id)
-    db.session.delete(house)
+    post = House.query.get(id)
+    db.session.delete(post)
     flash('删除成功！')
     return redirect(referer)

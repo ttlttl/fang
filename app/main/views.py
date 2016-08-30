@@ -1,7 +1,9 @@
+# -*- coding=UTF-8 -*-
 from flask import render_template, request, redirect, url_for
 from . import main
 from ..models import House, District, Area, Community
 import re
+
 
 # total price range
 a_range = ((0, 10000), (0, 101), (101, 150), (151, 201), (201, 301), \
