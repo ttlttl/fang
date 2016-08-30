@@ -5,7 +5,7 @@
 
 {% block page_content %}
 <ol class="breadcrumb">
-  <li><a href="{{ url_for('main.index') }}">主页</a></li>
+  <li><a href="{{ url_for('edit.main') }}">后台主页</a></li>
   <li><a href="{{ url_for('edit.districts') }}">上海</a></li>
   <li><a href="{{ url_for('edit.areas', id=area.district.id) }}">{{area.district.name}}</a></li>
   <li class="active">{{area.name}}</li>

@@ -295,7 +295,7 @@ def area_management(id):
 @login_required
 def posts(id):
     community = Community.query.get_or_404(id)
-    posts = community.posts
+    posts = community.houses
     return render_template('edit/posts.html', community=community, posts=posts)
 
 
